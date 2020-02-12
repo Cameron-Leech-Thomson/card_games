@@ -1,8 +1,3 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import sheffield.*;
-
 public class Solitaire {
     public static void main(String[] args) {
         // Create a deck instance.
@@ -66,7 +61,6 @@ public class Solitaire {
         System.out.println(displayTop(pileC)[0] + "  " + displayTop(pileH)[0] + "  " + displayTop(pileS)[0] + "  "
                 + displayTop(pileD)[0] + "        " + displayTop(sparesStack)[0]);
 
-        // Print the number of cards beneath the top card.
         System.out.println();
 
         String cardLine = displayTop(pile1)[0] + " " + displayTop(pile2)[0] + " " + displayTop(pile3)[0] + " "
@@ -77,14 +71,11 @@ public class Solitaire {
                 + displayTop(pile4)[1] + "  " + displayTop(pile5)[1] + "  " + displayTop(pile6)[1] + "  "
                 + displayTop(pile7)[1];
 
-        System.out.println(displayTop(pile1)[1] + "  " + displayTop(pile2)[1] + "  " + displayTop(pile3)[1] + "  "
-                + displayTop(pile4)[1] + "  " + displayTop(pile5)[1] + "  " + displayTop(pile6)[1] + "  "
-                + displayTop(pile7)[1]);
+        // Print the number of cards beneath the top card.
+        System.out.println(formatOutput(cardLine, cardNum));
 
         // Display the top card for each pile.
-        System.out.println(displayTop(pile1)[0] + " " + displayTop(pile2)[0] + " " + displayTop(pile3)[0] + " "
-                + displayTop(pile4)[0] + " " + displayTop(pile5)[0] + " " + displayTop(pile6)[0] + " "
-                + displayTop(pile7)[0]);
+        System.out.println(cardLine);
     }
 
     public static String formatOutput(String cards, String nums) {
@@ -95,7 +86,8 @@ public class Solitaire {
         char[] cardsArr = cards.toCharArray();
 
         // Create index to check which cards are 3 chars long.
-        String[] tripleIndex = new String[7];
+        String[] tripleArray = new String[7];
+        int tripleIndex = 0;
 
         // Counter to check how long each card is.
         int count = 0;
@@ -106,34 +98,42 @@ public class Solitaire {
                 count = 0;
             }
             // Increases count if there isn't a space.
-            else{
+            else {
                 count += 1;
             }
             // Once there's 3 chars, note the index and reset the count.
             if (count == 3) {
-                tripleIndex[i] = Integer.toString(i);
+                tripleArray[tripleIndex] = Integer.toString(i);
+                tripleIndex += 1;
                 count = 0;
             }
         }
-        
-        tripleIndex = removeNull(tripleIndex);
 
-        if (tripleIndex.length == 0) {
+        tripleArray = removeNull(tripleArray);
+
+        if (tripleArray.length == 0) {
             return nums;
-        }
-        else {
-            for (int i = 0; i < tripleIndex.length; i++) {
+        } else {
+            for (int i = 0; i < tripleArray.length; i++) {
                 // Finds the index to add the extra space to.
-                int numsIndex = Integer.parseInt(tripleIndex[i]);
-                
+                int numsIndex = Integer.parseInt(tripleArray[i]);
+
                 // Adds the extra space to the string.
                 numsArr = addToArray(numsArr, ' ', numsIndex);
             }
-            // Reassemble the array back into the string.
-            nums = numsArr.toString();
             // Return the updated string.
-            return nums;
+            return assembleString(numsArr);
         }
+    }
+
+    public static String assembleString (char[] arr) {
+        // Initilise the output string.
+        String assembledString = "";
+
+        for (int i = 0; i < arr.length; i++) {
+            assembledString += arr[i];
+        }
+        return assembledString;
     }
 
     public static char[] addToArray(char[] arr, char content, int insertIndex) {
@@ -143,13 +143,15 @@ public class Solitaire {
         // Pointer for arr.
         int j = 0;
 
-        for(int i = 0; i < resizedArray.length; i++) {
+        for (int i = 0; i < resizedArray.length; i++) {
             if (i == insertIndex) {
                 resizedArray[i] = content;
                 j -= 1;
-            }
-            else {
-                resizedArray[i] = arr[j];
+            } else {
+                if (j == resizedArray.length - 1) {
+                } else {
+                    resizedArray[i] = arr[j];
+                }
             }
             j += 1;
         }
