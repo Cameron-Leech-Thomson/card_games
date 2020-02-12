@@ -1,3 +1,5 @@
+import sheffield.*;
+
 public class Solitaire {
     public static void main(String[] args) {
         // Create a deck instance.
@@ -83,6 +85,22 @@ public class Solitaire {
 
         // Display the top card for each pile.
         System.out.println(cardLine);
+    }
+
+    public static boolean winCondition (String[] pileC, String[] pileH, String[] pileS, String[] pileD) {
+        pileC = removeNull(pileC);
+        pileH = removeNull(pileH);
+        pileS = removeNull(pileS);
+        pileD = removeNull(pileD);
+
+        if((pileC.length == pileH.length) && (pileC.length == pileD.length) && (pileC.length == pileS.length)) {
+            System.out.println("Congratulations, you win!");
+            System.exit(0);
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     public static String[][] moveCards(String[] pile1, String[] pile2) {
