@@ -58,28 +58,22 @@ public class Solitaire {
         // Shuffle the remaining cards into the spares stack.
         sparesStack = shuffle(deck);
 
-        // Initialise EasyWriter for formatted text.
-        EasyWriter boardWriter = new EasyWriter();
-
         //Display number of cards beneath the top card.
-        boardWriter.println(displayTop(pileC)[1] + "  " + displayTop(pileH)[1] + "  " + displayTop(pileS)[1] + "  " + displayTop(pileD)[1] + "              " + 
+        System.out.println(displayTop(pileC)[1] + "  " + displayTop(pileH)[1] + "  " + displayTop(pileS)[1] + "  " + displayTop(pileD)[1] + "        " + 
         displayTop(sparesStack)[1]);
 
         // Display suit piles.
-        boardWriter.println(displayTop(pileC)[0] + "  " + displayTop(pileH)[0] + "  " + displayTop(pileS)[0] + "  " + displayTop(pileD)[0] + "              " + 
+        System.out.println(displayTop(pileC)[0] + "  " + displayTop(pileH)[0] + "  " + displayTop(pileS)[0] + "  " + displayTop(pileD)[0] + "        " + 
                             displayTop(sparesStack)[0]);
 
         // Print the number of cards beneath the top card.
-        boardWriter.println();
-        boardWriter.println(displayTop(pile1)[1] + "  " + displayTop(pile2)[1] + "  " + displayTop(pile3)[1] + "  " + displayTop(pile4)[1] + "  " + 
+        System.out.println();
+        System.out.println(displayTop(pile1)[1] + "  " + displayTop(pile2)[1] + "  " + displayTop(pile3)[1] + "  " + displayTop(pile4)[1] + "  " + 
                             displayTop(pile5)[1] + "  " + displayTop(pile6)[1] + "  " + displayTop(pile7)[1]);
 
         // Display the top card for each pile.
-        boardWriter.println(displayTop(pile1)[0] + " " + displayTop(pile2)[0] + " " + displayTop(pile3)[0] + " " + displayTop(pile4)[0] + " " + 
-                            displayTop(pile5)[0] + " " + displayTop(pile6)[0] + " " + displayTop(pile7)[0]);          
-
-        // Close the EasyWriter.
-        boardWriter.close();
+        System.out.println(displayTop(pile1)[0] + " " + displayTop(pile2)[0] + " " + displayTop(pile3)[0] + " " + displayTop(pile4)[0] + " " + 
+                            displayTop(pile5)[0] + " " + displayTop(pile6)[0] + " " + displayTop(pile7)[0]);  
     }
 
     public static String[] displayTop (String[] pile) throws IndexOutOfBoundsException{
