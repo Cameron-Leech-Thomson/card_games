@@ -103,7 +103,7 @@ public class Solitaire {
         // Counter for the length of the list without nulls.
         int count = 0;
 
-        for (int i = 0; i < arr.length - 1; i++) {
+        for (int i = 0; i < arr.length; i++) {
             if (arr[i] == null) {}
             else {
                 count += 1;
@@ -115,7 +115,7 @@ public class Solitaire {
         int j = 0;
 
         //Fill the array.
-        for (int i = 0; i < arr.length - 1; i++) {
+        for (int i = 0; i < arr.length; i++) {
             if (arr[i] == null) {}
             else {
                 arrNull[j] = arr[i];
@@ -199,9 +199,9 @@ public class Solitaire {
     public static String[][] fillPiles(String[] pile, int numCards, String[] deck) {
         for (int i = 0; i < numCards; i++) {
             // Generate a random card from the deck.
-            int rand = rand(0, deck.length - i);
+            int rand = rand(0, deck.length - 1);
             while (linearSearch(pile, deck[rand]) != -1) {
-                rand = rand(0, deck.length - i);
+                rand = rand(0, deck.length - 1);
             }
 
             // Places that card in the pile.
@@ -209,6 +209,7 @@ public class Solitaire {
 
             // Removes the card from the deck to avoid duplicates.
             deck = deleteElement(deck, deck[rand]);
+            deck = removeNull(deck);
         }
         // Puts the pile & the deck together so it can be returned.
         String[][] result = { pile, deck };
@@ -324,7 +325,7 @@ public class Solitaire {
 
     // Purely for debugging arrays:
     public static void outputArray(String[] arr) {
-        for (int i = 0; i < arr.length - 1; i++) {
+        for (int i = 0; i < arr.length; i++) {
             if (arr[i] != null) {
                 System.out.print(arr[i] + ", ");
             }

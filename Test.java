@@ -19,6 +19,8 @@ public class Test {
         }
     }
 
+    System.out.println(count);
+
     // Initialise duplicate array to remove nulls.
     String[] arrNull = new String[count];
     int j = 0;
@@ -63,7 +65,7 @@ public class Test {
 
   // Purely for debugging arrays:
   public static void outputArray(String[] arr) {
-    for (int i = 0; i < arr.length - 1; i++) {
+    for (int i = 0; i < arr.length; i++) {
       System.out.print(arr[i] + ", ");
     }
     System.out.println("");
