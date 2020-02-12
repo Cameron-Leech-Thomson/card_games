@@ -88,6 +88,9 @@ public class Solitaire {
     }
 
     public static String formatOutput(String cards, String nums) {
+        // Turns the number string into an array.
+        char[] numsArr = nums.toCharArray();
+
         // Turns the cards string into an array.
         char[] cardsArr = cards.toCharArray();
 
@@ -120,9 +123,32 @@ public class Solitaire {
         }
         else {
             for (int i = 0; i < tripleIndex.length; i++) {
+                int numsIndex = Integer.parseInt(tripleIndex[i]);
                 
+                numsArr[numsIndex]
             }
         }
+    }
+
+    public static String[] addToArray(String[] arr, String content, int insertIndex) {
+        // Initialise larger array.
+        String[] resizedArray = new String[arr.length + 1];
+
+        // Pointer for arr.
+        int j = 0;
+
+        for(int i = 0; i < resizedArray.length; i++) {
+            if (i == insertIndex) {
+                resizedArray[i] = content;
+                j -= 1;
+            }
+            else {
+                resizedArray[i] = arr[j];
+            }
+            j += 1;
+        }
+        // Returns the resized array.
+        return resizedArray;
     }
 
     public static String[] displayTop(String[] pile) throws IndexOutOfBoundsException {
