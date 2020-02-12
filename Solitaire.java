@@ -53,6 +53,13 @@ public class Solitaire {
         // Shuffle the remaining cards into the spares stack.
         sparesStack = shuffle(deck);
 
+        System.out.println("To move cards, name the pile you want to move from, followed by the pile you want."
+                + "For example, if you want to move the card on the leftmost pile to the card at the rightmost, you would type \"1 7\". "
+                + "If you want to access the spares stack type \"spares\", and if you want to cycle the spares stack, type \"cycle\"."
+                + "To move to one of the top piles, type the name of the suit that the card belongs in, for example \"CK clubs\".");
+
+        System.out.println();
+
         // Display number of cards beneath the top card.
         System.out.println(displayTop(pileC)[1] + "  " + displayTop(pileH)[1] + "  " + displayTop(pileS)[1] + "  "
                 + displayTop(pileD)[1] + "        " + displayTop(sparesStack)[1]);
@@ -76,6 +83,21 @@ public class Solitaire {
 
         // Display the top card for each pile.
         System.out.println(cardLine);
+    }
+
+    public static void moveCards(String[] pile1, String[] pile2) {
+        // Gets the value of the cards that are being moved.
+        String card1 = displayTop(pile1)[0];
+        // Makes sure the cards can stack before proceeding.
+        if (!canStack(pile1, pile2)) {
+            System.out.println("Sorry, you can't stack those cards.");
+            // If not exit the function.
+            return;
+        }
+        // Finds the highest not-null index of the pile.
+        int pileTop = Integer.parseInt(displayTop(pile2)[1]) + 2;
+
+        pile2 = addStringToArray(pile2, card1, pileTop);
     }
 
     public static String formatOutput(String cards, String nums) {
@@ -119,14 +141,14 @@ public class Solitaire {
                 int numsIndex = Integer.parseInt(tripleArray[i]);
 
                 // Adds the extra space to the string.
-                numsArr = addToArray(numsArr, ' ', numsIndex);
+                numsArr = addCharToArray(numsArr, ' ', numsIndex);
             }
             // Return the updated string.
             return assembleString(numsArr);
         }
     }
 
-    public static String assembleString (char[] arr) {
+    public static String assembleString(char[] arr) {
         // Initilise the output string.
         String assembledString = "";
 
@@ -136,7 +158,30 @@ public class Solitaire {
         return assembledString;
     }
 
-    public static char[] addToArray(char[] arr, char content, int insertIndex) {
+    public static String[] addStringToArray(String[] arr, String content, int insertIndex) {
+        // Initialise larger array.
+        String[] resizedArray = new String[arr.length + 1];
+
+        // Pointer for arr.
+        int j = 0;
+
+        for (int i = 0; i < resizedArray.length; i++) {
+            if (i == insertIndex) {
+                resizedArray[i] = content;
+                j -= 1;
+            } else {
+                if (j == resizedArray.length - 1) {
+                } else {
+                    resizedArray[i] = arr[j];
+                }
+            }
+            j += 1;
+        }
+        // Returns the resized array.
+        return resizedArray;
+    }
+
+    public static char[] addCharToArray(char[] arr, char content, int insertIndex) {
         // Initialise larger array.
         char[] resizedArray = new char[arr.length + 1];
 
@@ -209,7 +254,10 @@ public class Solitaire {
         return arrNull;
     }
 
-    public static boolean canStack(String card1, String card2) {
+    public static boolean canStack(String[] pile1, String[] pile2) {
+        // Takes value of the cards.
+        String card1 = displayTop(pile1)[0];
+        String card2 = displayTop(pile2)[0];
         // Obtain details of card 1 (top).
         char suit1 = card1.toCharArray()[0];
         int val1;
@@ -258,6 +306,8 @@ public class Solitaire {
             } else {
                 return false;
             }
+        } else if ((val2 == 13) && (Integer.parseInt(displayTop(pile2)[0]) == 0)) {
+            return true;
         } else {
             return false;
         }
