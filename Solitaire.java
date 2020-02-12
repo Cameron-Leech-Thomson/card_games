@@ -1,7 +1,9 @@
+import java.io.IOException;
+
 import sheffield.*;
 
 public class Solitaire {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException{
         // Create a deck instance.
         String[] deck = generateDeck();
 
@@ -55,52 +57,83 @@ public class Solitaire {
         // Shuffle the remaining cards into the spares stack.
         sparesStack = shuffle(deck);
 
-        System.out.println("To move cards, name the pile you want to move from, followed by the pile you want. "
-                + "For example, if you want to move the card on the leftmost pile to the card at the rightmost, you would type \"1 7\". "
-                + "If you want to access the spares stack type \"spares\", and if you want to cycle the spares stack, type \"cycle\". "
-                + "To move to one of the top piles, type the name of the suit that the card belongs in, for example \"CK clubs\". ");
+        // Initialise EasyReader.
+        EasyReader keyboard = new EasyReader();
 
-        System.out.println();
+        while (!winCondition(pileC, pileH, pileS, pileD)) {
 
-        // Display number of cards beneath the top card.
-        System.out.println(displayTop(pileC)[1] + "  " + displayTop(pileH)[1] + "  " + displayTop(pileS)[1] + "  "
-                + displayTop(pileD)[1] + "        " + displayTop(sparesStack)[1]);
+            System.out.println("To move cards, name the pile you want to move from, followed by the pile you want. "
+                    + "For example, if you want to move the card on the leftmost pile to the card at the rightmost, you would type \"1 7\". "
+                    + "If you want to access the spares stack type \"spares\", and if you want to cycle the spares stack, type \"cycle\". "
+                    + "To move to one of the top piles, type the name of the suit that the card belongs in, for example \"CK clubs\". ");
 
-        // Display suit piles.
-        System.out.println(displayTop(pileC)[0] + "  " + displayTop(pileH)[0] + "  " + displayTop(pileS)[0] + "  "
-                + displayTop(pileD)[0] + "        " + displayTop(sparesStack)[0]);
+            System.out.println(); 
 
-        System.out.println();
+            // Display number of cards beneath the top card.
+            System.out.println(displayTop(pileC)[1] + "  " + displayTop(pileH)[1] + "  " + displayTop(pileS)[1] + "  "
+                    + displayTop(pileD)[1] + "        " + displayTop(sparesStack)[1]);
 
-        String cardLine = displayTop(pile1)[0] + " " + displayTop(pile2)[0] + " " + displayTop(pile3)[0] + " "
-                + displayTop(pile4)[0] + " " + displayTop(pile5)[0] + " " + displayTop(pile6)[0] + " "
-                + displayTop(pile7)[0];
+            // Display suit piles.
+            System.out.println(displayTop(pileC)[0] + "  " + displayTop(pileH)[0] + "  " + displayTop(pileS)[0] + "  "
+                    + displayTop(pileD)[0] + "        " + displayTop(sparesStack)[0]);
 
-        String cardNum = displayTop(pile1)[1] + "  " + displayTop(pile2)[1] + "  " + displayTop(pile3)[1] + "  "
-                + displayTop(pile4)[1] + "  " + displayTop(pile5)[1] + "  " + displayTop(pile6)[1] + "  "
-                + displayTop(pile7)[1];
+            System.out.println();
 
-        // Print the number of cards beneath the top card.
-        System.out.println(formatOutput(cardLine, cardNum));
+            String cardLine = displayTop(pile1)[0] + " " + displayTop(pile2)[0] + " " + displayTop(pile3)[0] + " "
+                    + displayTop(pile4)[0] + " " + displayTop(pile5)[0] + " " + displayTop(pile6)[0] + " "
+                    + displayTop(pile7)[0];
 
-        // Display the top card for each pile.
-        System.out.println(cardLine);
+            String cardNum = displayTop(pile1)[1] + "  " + displayTop(pile2)[1] + "  " + displayTop(pile3)[1] + "  "
+                    + displayTop(pile4)[1] + "  " + displayTop(pile5)[1] + "  " + displayTop(pile6)[1] + "  "
+                    + displayTop(pile7)[1];
+
+            // Print the number of cards beneath the top card.
+            System.out.println(formatOutput(cardLine, cardNum));
+
+            // Display the top card for each pile.
+            System.out.println(cardLine);
+
+            System.out.println();
+
+            String userInput = keyboard.readString("> ");
+            
+            if (userInput == "cycle") {
+                cycleSpares(sparesStack);
+            }
+            
+        }
+
+        // Close EasyReader - avoid I/O Exception error.
+        keyboard.close();
     }
 
-    public static boolean winCondition (String[] pileC, String[] pileH, String[] pileS, String[] pileD) {
+    public static boolean winCondition(String[] pileC, String[] pileH, String[] pileS, String[] pileD) {
         pileC = removeNull(pileC);
         pileH = removeNull(pileH);
         pileS = removeNull(pileS);
         pileD = removeNull(pileD);
 
-        if((pileC.length == pileH.length) && (pileC.length == pileD.length) && (pileC.length == pileS.length)) {
+        if ((pileC.length == 13) && (pileC.length == pileH.length) && (pileC.length == pileD.length) && (pileC.length == pileS.length)) {
             System.out.println("Congratulations, you win!");
             System.exit(0);
             return true;
-        }
-        else{
+        } else {
             return false;
         }
+    }
+
+    public static String[] cycleSpares(String[] spares) {
+        // Take the value of the final element.
+        String finalCard = spares[spares.length-1];
+        for (int i = 1; i < spares.length - 1; i++) {
+            // Pushes each card forward one.
+            spares[i + 1] = spares[i];
+        }
+        // Sets the first card as the final card.
+        spares[0] = finalCard;
+
+        // Returns the string.
+        return spares;
     }
 
     public static String[][] moveCards(String[] pile1, String[] pile2) {
