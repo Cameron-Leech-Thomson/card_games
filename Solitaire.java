@@ -53,10 +53,10 @@ public class Solitaire {
         // Shuffle the remaining cards into the spares stack.
         sparesStack = shuffle(deck);
 
-        System.out.println("To move cards, name the pile you want to move from, followed by the pile you want."
+        System.out.println("To move cards, name the pile you want to move from, followed by the pile you want. "
                 + "For example, if you want to move the card on the leftmost pile to the card at the rightmost, you would type \"1 7\". "
-                + "If you want to access the spares stack type \"spares\", and if you want to cycle the spares stack, type \"cycle\"."
-                + "To move to one of the top piles, type the name of the suit that the card belongs in, for example \"CK clubs\".");
+                + "If you want to access the spares stack type \"spares\", and if you want to cycle the spares stack, type \"cycle\". "
+                + "To move to one of the top piles, type the name of the suit that the card belongs in, for example \"CK clubs\". ");
 
         System.out.println();
 
