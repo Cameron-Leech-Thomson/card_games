@@ -119,20 +119,26 @@ public class Solitaire {
         tripleIndex = removeNull(tripleIndex);
 
         if (tripleIndex.length == 0) {
- 
+            return nums;
         }
         else {
             for (int i = 0; i < tripleIndex.length; i++) {
+                // Finds the index to add the extra space to.
                 int numsIndex = Integer.parseInt(tripleIndex[i]);
                 
-                numsArr[numsIndex]
+                // Adds the extra space to the string.
+                numsArr = addToArray(numsArr, ' ', numsIndex);
             }
+            // Reassemble the array back into the string.
+            nums = numsArr.toString();
+            // Return the updated string.
+            return nums;
         }
     }
 
-    public static String[] addToArray(String[] arr, String content, int insertIndex) {
+    public static char[] addToArray(char[] arr, char content, int insertIndex) {
         // Initialise larger array.
-        String[] resizedArray = new String[arr.length + 1];
+        char[] resizedArray = new char[arr.length + 1];
 
         // Pointer for arr.
         int j = 0;
