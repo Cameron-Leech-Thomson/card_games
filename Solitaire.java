@@ -58,31 +58,80 @@ public class Solitaire {
         // Shuffle the remaining cards into the spares stack.
         sparesStack = shuffle(deck);
 
-        //Display number of cards beneath the top card.
-        System.out.println(displayTop(pileC)[1] + "  " + displayTop(pileH)[1] + "  " + displayTop(pileS)[1] + "  " + displayTop(pileD)[1] + "        " + 
-        displayTop(sparesStack)[1]);
+        // Display number of cards beneath the top card.
+        System.out.println(displayTop(pileC)[1] + "  " + displayTop(pileH)[1] + "  " + displayTop(pileS)[1] + "  "
+                + displayTop(pileD)[1] + "        " + displayTop(sparesStack)[1]);
 
         // Display suit piles.
-        System.out.println(displayTop(pileC)[0] + "  " + displayTop(pileH)[0] + "  " + displayTop(pileS)[0] + "  " + displayTop(pileD)[0] + "        " + 
-                            displayTop(sparesStack)[0]);
+        System.out.println(displayTop(pileC)[0] + "  " + displayTop(pileH)[0] + "  " + displayTop(pileS)[0] + "  "
+                + displayTop(pileD)[0] + "        " + displayTop(sparesStack)[0]);
 
         // Print the number of cards beneath the top card.
         System.out.println();
-        System.out.println(displayTop(pile1)[1] + "  " + displayTop(pile2)[1] + "  " + displayTop(pile3)[1] + "  " + displayTop(pile4)[1] + "  " + 
-                            displayTop(pile5)[1] + "  " + displayTop(pile6)[1] + "  " + displayTop(pile7)[1]);
+
+        String cardLine = displayTop(pile1)[0] + " " + displayTop(pile2)[0] + " " + displayTop(pile3)[0] + " "
+                + displayTop(pile4)[0] + " " + displayTop(pile5)[0] + " " + displayTop(pile6)[0] + " "
+                + displayTop(pile7)[0];
+
+        String cardNum = displayTop(pile1)[1] + "  " + displayTop(pile2)[1] + "  " + displayTop(pile3)[1] + "  "
+                + displayTop(pile4)[1] + "  " + displayTop(pile5)[1] + "  " + displayTop(pile6)[1] + "  "
+                + displayTop(pile7)[1];
+
+        System.out.println(displayTop(pile1)[1] + "  " + displayTop(pile2)[1] + "  " + displayTop(pile3)[1] + "  "
+                + displayTop(pile4)[1] + "  " + displayTop(pile5)[1] + "  " + displayTop(pile6)[1] + "  "
+                + displayTop(pile7)[1]);
 
         // Display the top card for each pile.
-        System.out.println(displayTop(pile1)[0] + " " + displayTop(pile2)[0] + " " + displayTop(pile3)[0] + " " + displayTop(pile4)[0] + " " + 
-                            displayTop(pile5)[0] + " " + displayTop(pile6)[0] + " " + displayTop(pile7)[0]);  
+        System.out.println(displayTop(pile1)[0] + " " + displayTop(pile2)[0] + " " + displayTop(pile3)[0] + " "
+                + displayTop(pile4)[0] + " " + displayTop(pile5)[0] + " " + displayTop(pile6)[0] + " "
+                + displayTop(pile7)[0]);
     }
 
-    public static String[] displayTop (String[] pile) throws IndexOutOfBoundsException{
+    public static String formatOutput(String cards, String nums) {
+        // Turns the cards string into an array.
+        char[] cardsArr = cards.toCharArray();
+
+        // Create index to check which cards are 3 chars long.
+        String[] tripleIndex = new String[7];
+
+        // Counter to check how long each card is.
+        int count = 0;
+
+        for (int i = 0; i < cardsArr.length; i++) {
+            // Resets count if there's a space.
+            if (cardsArr[i] == ' ') {
+                count = 0;
+            }
+            // Increases count if there isn't a space.
+            else{
+                count += 1;
+            }
+            // Once there's 3 chars, note the index and reset the count.
+            if (count == 3) {
+                tripleIndex[i] = Integer.toString(i);
+                count = 0;
+            }
+        }
+        
+        tripleIndex = removeNull(tripleIndex);
+
+        if (tripleIndex.length == 0) {
+ 
+        }
+        else {
+            for (int i = 0; i < tripleIndex.length; i++) {
+                
+            }
+        }
+    }
+
+    public static String[] displayTop(String[] pile) throws IndexOutOfBoundsException {
         // Array containing the top card & how many cards are beneath it.
         String[] result = new String[2];
         // Search pile for the first null value.
-        for(int i = pile.length - 1; i >= 0; i--) {
-            if (pile[i] == null){}
-            else{
+        for (int i = pile.length - 1; i >= 0; i--) {
+            if (pile[i] == null) {
+            } else {
                 result[0] = pile[i];
                 result[1] = Integer.toString(i);
                 return result;
@@ -94,12 +143,18 @@ public class Solitaire {
     }
 
     public static String[] removeNull(String[] arr) {
+        // Checks to see if the array is empty.
+        if (arr.length == 0) {
+            String[] empty = {};
+            return empty;
+        }
+
         // Counter for the length of the list without nulls.
         int count = 0;
 
         for (int i = 0; i < arr.length; i++) {
-            if (arr[i] == null) {}
-            else {
+            if (arr[i] == null) {
+            } else {
                 count += 1;
             }
         }
@@ -108,10 +163,10 @@ public class Solitaire {
         String[] arrNull = new String[count];
         int j = 0;
 
-        //Fill the array.
+        // Fill the array.
         for (int i = 0; i < arr.length; i++) {
-            if (arr[i] == null) {}
-            else {
+            if (arr[i] == null) {
+            } else {
                 arrNull[j] = arr[i];
                 j += 1;
             }
