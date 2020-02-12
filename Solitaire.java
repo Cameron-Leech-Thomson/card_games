@@ -85,19 +85,33 @@ public class Solitaire {
         System.out.println(cardLine);
     }
 
-    public static void moveCards(String[] pile1, String[] pile2) {
+    public static String[][] moveCards(String[] pile1, String[] pile2) {
+        // Sets up the result array to output the two altered piles.
+        String[][] result = new String[2][];
         // Gets the value of the cards that are being moved.
         String card1 = displayTop(pile1)[0];
         // Makes sure the cards can stack before proceeding.
         if (!canStack(pile1, pile2)) {
             System.out.println("Sorry, you can't stack those cards.");
             // If not exit the function.
-            return;
+            result[0] = pile1;
+            result[1] = pile2;
+            return result;
         }
         // Finds the highest not-null index of the pile.
         int pileTop = Integer.parseInt(displayTop(pile2)[1]) + 2;
 
+        // Adds the card to the pile.
         pile2 = addStringToArray(pile2, card1, pileTop);
+
+        // Removes the card from the other pile.
+        pile1 = deleteElement(pile1, card1);
+        pile1 = removeNull(pile1);
+
+        // Return the altered piles.
+        result[0] = pile1;
+        result[1] = pile2;
+        return result;
     }
 
     public static String formatOutput(String cards, String nums) {
