@@ -198,7 +198,10 @@ public class Solitaire {
             // Moves the cards.
             String[][] result2 = moveCards(movePile, destinationPile);
             
-            
+            // Updates the piles.
+            movePile = result2[0];
+            destinationPile = result2[1];
+
         }
         // Close EasyReader - avoid I/O Exception error.
         keyboard.close();
