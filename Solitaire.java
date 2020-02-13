@@ -106,8 +106,8 @@ public class Solitaire {
             String[] inputArray = userInput.split(" ");
             int index = linearSearch(inputArray, " ");
 
-            String[] movePile;
-            String[] destinationPile;
+            String[] movePile = {};
+            String[] destinationPile = {};
 
             switch (inputArray[index - 1].toLowerCase()) {
             case "1":
@@ -151,6 +151,54 @@ public class Solitaire {
                         .println("Invalid input - \"\"" + inputArray[index - 1] + "\"\". Please enter a valid input.");
                 break;
             }
+
+            switch (inputArray[index + 1].toLowerCase()) {
+            case "1":
+                destinationPile = pile1;
+                break;
+            case "2":
+                destinationPile = pile2;
+                break;
+            case "3":
+                destinationPile = pile3;
+                break;
+            case "4":
+                destinationPile = pile4;
+                break;
+            case "5":
+                destinationPile = pile5;
+                break;
+            case "6":
+                destinationPile = pile6;
+                break;
+            case "7":
+                destinationPile = pile7;
+                break;
+            case "spares":
+                destinationPile = sparesStack;
+                break;
+            case "clubs":
+                destinationPile = pileC;
+                break;
+            case "hearts":
+                destinationPile = pileH;
+                break;
+            case "spades":
+                destinationPile = pileS;
+                break;
+            case "diamonds":
+                destinationPile = pileD;
+                break;
+            default:
+                System.out
+                        .println("Invalid input - \"\"" + inputArray[index + 1] + "\"\". Please enter a valid input.");
+                break;
+            }
+
+            // Moves the cards.
+            String[][] result2 = moveCards(movePile, destinationPile);
+            
+            
         }
         // Close EasyReader - avoid I/O Exception error.
         keyboard.close();
