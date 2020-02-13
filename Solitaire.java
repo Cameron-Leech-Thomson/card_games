@@ -3,7 +3,7 @@ import java.io.IOException;
 import sheffield.*;
 
 public class Solitaire {
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws IOException {
         // Create a deck instance.
         String[] deck = generateDeck();
 
@@ -67,7 +67,7 @@ public class Solitaire {
                     + "If you want to access the spares stack type \"spares\", and if you want to cycle the spares stack, type \"cycle\". "
                     + "To move to one of the top piles, type the name of the suit that the card belongs in, for example \"CK clubs\". ");
 
-            System.out.println(); 
+            System.out.println();
 
             // Display number of cards beneath the top card.
             System.out.println(displayTop(pileC)[1] + "  " + displayTop(pileH)[1] + "  " + displayTop(pileS)[1] + "  "
@@ -95,14 +95,63 @@ public class Solitaire {
 
             System.out.println();
 
+            // Prompts the user & takes in their input.
             String userInput = keyboard.readString("> ");
-            
+
             if (userInput == "cycle") {
                 cycleSpares(sparesStack);
             }
-            
-        }
 
+            // Sets the input into an array.
+            String[] inputArray = userInput.split(" ");
+            int index = linearSearch(inputArray, " ");
+
+            String[] movePile;
+            String[] destinationPile;
+
+            switch (inputArray[index - 1].toLowerCase()) {
+            case "1":
+                movePile = pile1;
+                break;
+            case "2":
+                movePile = pile2;
+                break;
+            case "3":
+                movePile = pile3;
+                break;
+            case "4":
+                movePile = pile4;
+                break;
+            case "5":
+                movePile = pile5;
+                break;
+            case "6":
+                movePile = pile6;
+                break;
+            case "7":
+                movePile = pile7;
+                break;
+            case "spares":
+                movePile = sparesStack;
+                break;
+            case "clubs":
+                movePile = pileC;
+                break;
+            case "hearts":
+                movePile = pileH;
+                break;
+            case "spades":
+                movePile = pileS;
+                break;
+            case "diamonds":
+                movePile = pileD;
+                break;
+            default:
+                System.out
+                        .println("Invalid input - \"\"" + inputArray[index - 1] + "\"\". Please enter a valid input.");
+                break;
+            }
+        }
         // Close EasyReader - avoid I/O Exception error.
         keyboard.close();
     }
@@ -113,7 +162,8 @@ public class Solitaire {
         pileS = removeNull(pileS);
         pileD = removeNull(pileD);
 
-        if ((pileC.length == 13) && (pileC.length == pileH.length) && (pileC.length == pileD.length) && (pileC.length == pileS.length)) {
+        if ((pileC.length == 13) && (pileC.length == pileH.length) && (pileC.length == pileD.length)
+                && (pileC.length == pileS.length)) {
             System.out.println("Congratulations, you win!");
             System.exit(0);
             return true;
@@ -124,7 +174,7 @@ public class Solitaire {
 
     public static String[] cycleSpares(String[] spares) {
         // Take the value of the final element.
-        String finalCard = spares[spares.length-1];
+        String finalCard = spares[spares.length - 1];
         for (int i = 1; i < spares.length - 1; i++) {
             // Pushes each card forward one.
             spares[i + 1] = spares[i];
