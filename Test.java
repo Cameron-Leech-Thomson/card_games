@@ -1,9 +1,12 @@
 public class Test {
   public static void main(String[] args) throws NullPointerException{
-    String[] arr = {"twat","gay",null,null};
-    outputArray(arr);
-    arr = removeNull(arr);
-    outputArray(arr);
+    Deck deck = new Deck();
+    deck.display();
+    deck.shuffle();
+    System.out.println();
+    deck.display();
+
+    System.out.println(deck.getCard(3));
   }
 
   public static String[] removeNull(String[] arr) {
