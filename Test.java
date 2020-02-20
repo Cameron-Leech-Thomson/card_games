@@ -1,13 +1,22 @@
+import java.text.DecimalFormat;
 public class Test {
   public static void main(String[] args) throws NullPointerException{
-    Deck deck = new Deck();
-    deck.display();
-    deck.shuffle();
-    System.out.println();
-    deck.display();
-
-    System.out.println(deck.getCard(3));
+    double val = 0;
+    int hundo = 0;
+    for (int i = 0; i < 7; i++) {
+      val = rand(49.250, 50.750) + hundo;
+      System.out.println(val/1000);
+      hundo += 100;
+    }
   }
+
+  public static double rand(double min, double max) {
+    // Generate a random value between the min and the max values passed.
+    double rand = Math.random() * (max - min) + min;
+
+    // Return the random value.
+    return rand;
+}
 
   public static String[] removeNull(String[] arr) {
     // Counter for the length of the list without nulls.

@@ -35,7 +35,7 @@ public class Board {
     public static void main(String[] args) {
         deck.shuffle();
 
-        setPile(pile1,1);
+        setPile(pile1,2);
         System.out.println(pile1[0]);
 
     }
