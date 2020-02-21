@@ -16,6 +16,10 @@ public class Rummy {
         String[] hand3 = new String[8];
         String[] hand4 = new String[8];
 
+        String[] pile = new String[52];
+
+        String[] playableCards = new String[52];
+
         int numPlayers = keyboard.readInt("How many players are you playing with? (Max 4, Min 2)");
 
         if (numPlayers == 2) {
@@ -34,10 +38,37 @@ public class Rummy {
 
         boolean winner = false;
 
+        int player = 1;
+
+        int turnCount = 0;
+
+        int startPoint = deckStart;
+
+        int count = 0;
+
+        for (int i = deckStart; i < 52; i++) {
+            playableCards[count] = deck[i];
+        }
+
         while (!winner) {
+            if (player < 5) {
+                System.out.println("Player " + player + "'s turn:");
+                player += 1;
+            }            
+
+            if (deckStart < 52) {
+                pile[turnCount] = deck[deckStart];
+            }
+            else {
+
+            }
+
+
             if (winCondition(hand1, 1) || winCondition(hand2, 2) || winCondition(hand3, 3) || winCondition(hand4, 4)) {
                 winner = true;
             }
+
+            clearScreen();
         }
 
         // Close the reader.
@@ -120,6 +151,11 @@ public class Rummy {
             return false;
         }
     }
+
+    public static void clearScreen() {  
+        System.out.print("\033[H\033[2J");  
+        System.out.flush();  
+    }  
 
     public static char getSuit(String card) {
         char suit = card.toCharArray()[0];
