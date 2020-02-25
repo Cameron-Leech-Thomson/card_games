@@ -205,8 +205,8 @@ public class Rummy {
 
         // Win conditions for the 4:
         for (int i = 1; i < hand.length - 3; i++) {
-            if ((getSuit(hand[i]) == getSuit(hand[i] + 1)) && (getSuit(hand[i]) == getSuit(hand[i] + 2))
-                    && (getSuit(hand[i]) == getSuit(hand[i] + 3))) {
+            if ((getSuit(hand[i]) == getSuit(hand[i + 1])) && (getSuit(hand[i]) == getSuit(hand[i + 2]))
+                    && (getSuit(hand[i]) == getSuit(hand[i + 3]))) {
                 if ((getRank(hand[i]) == getRank(hand[i + 1]) + 1) && (getRank(hand[i]) == getRank(hand[i + 2]) + 2)
                         && (getRank(hand[i]) == getRank(hand[i + 3]) + 3)) {
                     score += 1;
@@ -275,33 +275,38 @@ public class Rummy {
     }
 
     public static char getSuit(String card) {
-        char suit = card.toCharArray()[0];
+        char[] arr = card.toCharArray();
+        char suit = arr[0];
         return suit;
     }
 
     public static int getRank(String card) {
+        char[] arr = card.toCharArray();
 
-        // Intitialise rank
+        // Intitialise rank.
         int rank = 0;
 
-        switch(card.toCharArray()[1]) {
+        switch (arr[1]) {
             case 'A':
-            rank = 1;
-            break;
+                rank = 1;
+                break;
             case 'J':
-            rank = 11;
-            break;
+                rank = 11;
+                break;
             case 'Q':
-            rank = 12;
-            break;
+                rank = 12;
+                break;
             case 'K':
-            rank = 13;
-            break;
+                rank = 13;
+                break;
+            case '1':
+                rank = 10;
+                break;
             default:
-            rank = card.toCharArray()[1];
-            break;
+                rank = arr[1];
+                break;
         }
-        
+
         return rank;
     }
 
@@ -428,7 +433,7 @@ public class Rummy {
 
     private static int compareKeys(final String first, final String second) {
         if (first == null || second == null) {
-            return 0; 
+            return 0;
         } else {
             return first.compareTo(second);
         }
