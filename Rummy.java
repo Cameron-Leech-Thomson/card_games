@@ -40,29 +40,140 @@ public class Rummy {
 
         int player = 1;
 
-        int turnCount = 0;
+        int pileIndex = 0;
 
-        int startPoint = deckStart;
+        int playIndex = 0;
 
         int count = 0;
 
         for (int i = deckStart; i < 52; i++) {
             playableCards[count] = deck[i];
+            count += 1;
         }
 
         while (!winner) {
             if (player < 5) {
                 System.out.println("Player " + player + "'s turn:");
                 player += 1;
-            }            
-
-            if (deckStart < 52) {
-                pile[turnCount] = deck[deckStart];
-            }
-            else {
-
             }
 
+            if (player > numPlayers) {
+                player = 1;
+            }
+
+            if (pileIndex == 0) {
+                pile[0] = playableCards[playIndex];
+                playIndex += 1;
+            }
+
+            System.out.println("Card on player pile: " + pile[pileIndex]);
+
+            switch (player) {
+                case 1:
+                    displayHand(hand1);
+                    break;
+                case 2:
+                    displayHand(hand2);
+                    break;
+                case 3:
+                    displayHand(hand3);
+                    break;
+                case 4:
+                    displayHand(hand4);
+                    break;
+                default:
+                    break;
+            }
+
+            String pickPile = keyboard
+                    .readString("Would you like to pick from the player pile [p] or the face-down pile? [f]")
+                    .toLowerCase();
+            if (pickPile == "p") {
+                switch (player) {
+                    case 1:
+                        hand1[8] = pile[pileIndex];
+                        break;
+                    case 2:
+                        hand2[8] = pile[pileIndex];
+                        break;
+                    case 3:
+                        hand3[8] = pile[pileIndex];
+                        break;
+                    case 4:
+                        hand4[8] = pile[pileIndex];
+                        break;
+                    default:
+                        continue;
+                }
+
+                deleteElement(pile, pile[pileIndex]);
+                pileIndex -= 1;
+            } else {
+                switch (player) {
+                    case 1:
+                        hand1[8] = playableCards[playIndex];
+                        break;
+                    case 2:
+                        hand2[8] = playableCards[playIndex];
+                        break;
+                    case 3:
+                        hand3[8] = playableCards[playIndex];
+                        break;
+                    case 4:
+                        hand4[8] = playableCards[playIndex];
+                        break;
+                    default:
+                        continue;
+                }
+
+                deleteElement(playableCards, playableCards[playIndex]);
+                playIndex += 1;
+            }
+
+            switch (player) {
+                case 1:
+                    displayHand(hand1);
+                    break;
+                case 2:
+                    displayHand(hand2);
+                    break;
+                case 3:
+                    displayHand(hand3);
+                    break;
+                case 4:
+                    displayHand(hand4);
+                    break;
+                default:
+                    break;
+            }
+
+            int putDown = keyboard.readInt("Select the index of the card you'd like to put down (Starting from 1):")
+                    - 1;
+
+            switch (player) {
+                case 1:
+                    pile[pileIndex + 1] = hand1[putDown];
+                    deleteElement(hand1, hand1[putDown]);
+                    insertionSort(hand1);
+                    break;
+                case 2:
+                    pile[pileIndex + 1] = hand2[putDown];
+                    deleteElement(hand2, hand2[putDown]);
+                    insertionSort(hand2);
+                    break;
+                case 3:
+                    pile[pileIndex + 1] = hand3[putDown];
+                    deleteElement(hand3, hand3[putDown]);
+                    insertionSort(hand3);
+                    break;
+                case 4:
+                    pile[pileIndex + 1] = hand4[putDown];
+                    deleteElement(hand4, hand4[putDown]);
+                    insertionSort(hand4);
+                    break;
+                default:
+                    break;
+            }
 
             if (winCondition(hand1, 1) || winCondition(hand2, 2) || winCondition(hand3, 3) || winCondition(hand4, 4)) {
                 winner = true;
@@ -74,7 +185,7 @@ public class Rummy {
         // Close the reader.
         keyboard.close();
 
-        //Exit the program.
+        // Exit the program.
         System.exit(0);
     }
 
@@ -146,16 +257,15 @@ public class Rummy {
             System.out.println("Player " + playerNo + " Wins!!");
             System.exit(0);
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
 
-    public static void clearScreen() {  
-        System.out.print("\033[H\033[2J");  
-        System.out.flush();  
-    }  
+    public static void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
 
     public static char getSuit(String card) {
         char suit = card.toCharArray()[0];
@@ -225,26 +335,26 @@ public class Rummy {
             // Cases for special Strings (Ace, Jack, Queen, King).
             int j = i % 13;
             switch (j) {
-            case 1:
-                StringValue = suit + "A";
-                deck[i - 1] = StringValue;
-                break;
-            case 11:
-                StringValue = suit + "J";
-                deck[i - 1] = StringValue;
-                break;
-            case 12:
-                StringValue = suit + "Q";
-                deck[i - 1] = StringValue;
-                break;
-            case 0:
-                StringValue = suit + "K";
-                deck[i - 1] = StringValue;
-                break;
-            default:
-                StringValue = suit + Integer.toString(j);
-                deck[i - 1] = StringValue;
-                break;
+                case 1:
+                    StringValue = suit + "A";
+                    deck[i - 1] = StringValue;
+                    break;
+                case 11:
+                    StringValue = suit + "J";
+                    deck[i - 1] = StringValue;
+                    break;
+                case 12:
+                    StringValue = suit + "Q";
+                    deck[i - 1] = StringValue;
+                    break;
+                case 0:
+                    StringValue = suit + "K";
+                    deck[i - 1] = StringValue;
+                    break;
+                default:
+                    StringValue = suit + Integer.toString(j);
+                    deck[i - 1] = StringValue;
+                    break;
             }
         }
         // Sort the deck.
@@ -328,4 +438,13 @@ public class Rummy {
         // Return the updated array.
         return arrNull;
     }
+
+    public static void displayHand(String[] hand) {
+        String output = "";
+        for (int i = 0; i < hand.length; i++) {
+            output += "" + hand[i] + ", ";
+        }
+        System.out.println(output);
+    }
+
 }
