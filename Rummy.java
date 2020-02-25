@@ -9,9 +9,6 @@ public class Rummy {
     public static void main(String[] args) throws IOException {
         deck = shuffle(deck);
 
-        System.out.println(getRank(deck[0]));
-        System.out.println(getSuit(deck[0]));
-
         EasyReader keyboard = new EasyReader();
 
         String[] hand1 = new String[8];
@@ -23,7 +20,7 @@ public class Rummy {
 
         String[] playableCards = new String[52];
 
-        int numPlayers = keyboard.readInt("How many players are you playing with? (Max 4, Min 2)");
+        int numPlayers = keyboard.readInt("How many players are you playing with? (Max 4, Min 2) >");
 
         if (numPlayers == 2) {
             hand1 = fillHand(hand1);
@@ -66,8 +63,11 @@ public class Rummy {
 
             if (pileIndex == 0) {
                 pile[0] = playableCards[playIndex];
-                playIndex += 1;
+                playableCards = deleteElement(playableCards, playableCards[playIndex]);
+                playableCards = rearrangeNull(playableCards);
             }
+
+            displayHand(playableCards);
 
             System.out.println("Card on player pile: " + pile[pileIndex]);
 
@@ -89,7 +89,7 @@ public class Rummy {
             }
 
             String pickPile = keyboard
-                    .readString("Would you like to pick from the player pile [p] or the face-down pile? [f]")
+                    .readString("Would you like to pick from the player pile [p] or the face-down pile? [f] >")
                     .toLowerCase();
             if (pickPile == "p") {
                 switch (player) {
@@ -109,7 +109,7 @@ public class Rummy {
                         continue;
                 }
 
-                deleteElement(pile, pile[pileIndex]);
+                pile = deleteElement(pile, pile[pileIndex]);
                 pileIndex -= 1;
             } else {
                 switch (player) {
@@ -129,7 +129,7 @@ public class Rummy {
                         continue;
                 }
 
-                deleteElement(playableCards, playableCards[playIndex]);
+                playableCards = deleteElement(playableCards, playableCards[playIndex]);
                 playIndex += 1;
             }
 
@@ -150,34 +150,53 @@ public class Rummy {
                     break;
             }
 
-            // Check if the player has won.
-            if (winCondition(hand1, 1) || winCondition(hand2, 2) || winCondition(hand3, 3) || winCondition(hand4, 4)) {
-                winner = true;
+            System.out.println(playIndex);
+
+            // Checks if a player has won.
+            switch (numPlayers) {
+                case 2:
+                    if (winCondition(hand1, 1) || winCondition(hand2, 2)) {
+                        winner = true;
+                    }
+                    break;
+                case 3:
+                    if (winCondition(hand1, 1) || winCondition(hand2, 2) || winCondition(hand3, 3)) {
+                        winner = true;
+                    }
+                    break;
+                case 4:
+                    if (winCondition(hand1, 1) || winCondition(hand2, 2) || winCondition(hand3, 3)
+                            || winCondition(hand4, 4)) {
+                        winner = true;
+                    }
+                    break;
+                default:
+                    break;
             }
 
-            int putDown = keyboard.readInt("Select the index of the card you'd like to put down (Starting from 1):")
+            int putDown = keyboard.readInt("Select the index of the card you'd like to put down (Starting from 1) >")
                     - 1;
 
             switch (player) {
                 case 1:
                     pile[pileIndex + 1] = hand1[putDown];
-                    deleteElement(hand1, hand1[putDown]);
-                    insertionSort(hand1);
+                    hand1 = deleteElement(hand1, hand1[putDown]);
+                    hand1 = insertionSort(hand1);
                     break;
                 case 2:
                     pile[pileIndex + 1] = hand2[putDown];
-                    deleteElement(hand2, hand2[putDown]);
-                    insertionSort(hand2);
+                    hand2 = deleteElement(hand2, hand2[putDown]);
+                    hand2 = insertionSort(hand2);
                     break;
                 case 3:
                     pile[pileIndex + 1] = hand3[putDown];
-                    deleteElement(hand3, hand3[putDown]);
-                    insertionSort(hand3);
+                    hand3 = deleteElement(hand3, hand3[putDown]);
+                    hand3 = insertionSort(hand3);
                     break;
                 case 4:
                     pile[pileIndex + 1] = hand4[putDown];
-                    deleteElement(hand4, hand4[putDown]);
-                    insertionSort(hand4);
+                    hand4 = deleteElement(hand4, hand4[putDown]);
+                    hand4 = insertionSort(hand4);
                     break;
                 default:
                     break;
@@ -187,6 +206,8 @@ public class Rummy {
             pileIndex += 1;
 
             clearScreen();
+
+            displayHand(playableCards);
         }
 
         // Close the reader.
@@ -204,7 +225,7 @@ public class Rummy {
         hand = insertionSort(hand);
 
         // Win conditions for the 4:
-        for (int i = 1; i < hand.length - 3; i++) {
+        for (int i = 0; i < hand.length - 4; i++) {
             if ((getSuit(hand[i]) == getSuit(hand[i + 1])) && (getSuit(hand[i]) == getSuit(hand[i + 2]))
                     && (getSuit(hand[i]) == getSuit(hand[i + 3]))) {
                 if ((getRank(hand[i]) == getRank(hand[i + 1]) + 1) && (getRank(hand[i]) == getRank(hand[i + 2]) + 2)
@@ -240,7 +261,7 @@ public class Rummy {
             }
         }
 
-        for (int i = 1; i < hand.length - 2; i++) {
+        for (int i = 0; i < hand.length - 3; i++) {
             if ((getSuit(hand[i]) == getSuit(hand[i] + 1)) && (getSuit(hand[i]) == getSuit(hand[i] + 2))
                     && (getSuit(hand[i]) == getSuit(hand[i] + 3))) {
                 if ((getRank(hand[i]) == getRank(hand[i + 1]) + 1) && (getRank(hand[i]) == getRank(hand[i + 2]) + 2)
@@ -303,7 +324,7 @@ public class Rummy {
                 rank = 10;
                 break;
             default:
-                rank = arr[1];
+                rank = Character.getNumericValue(arr[1]);
                 break;
         }
 
@@ -316,8 +337,8 @@ public class Rummy {
             deckStart += 1;
         }
 
-        // Sort the hand to make it easier to read.
-        insertionSort(hand);
+        // Sort the array to make it easier to read.
+        hand = insertionSort(hand);
 
         return hand;
     }
@@ -483,13 +504,36 @@ public class Rummy {
         return arrNull;
     }
 
+    public static String[] rearrangeNull(String[] arr) {
+        // Checks to see if the array is empty.
+        if (arr.length == 0) {
+            String[] empty = {};
+            return empty;
+        }
+
+        // Initialise duplicate array with rearranged nulls.
+        String[] arrNull = new String[arr.length];
+        int j = 0;
+
+        // Fill the array.
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == null) {
+            } else {
+                arrNull[j] = arr[i];
+                j += 1;
+            }
+        }
+
+        return arrNull;
+    }
+
     public static void displayHand(String[] hand) {
         String output = "";
         for (int i = 0; i < hand.length; i++) {
             if (hand[i] == null) {
-                continue;
+            } else {
+                output += "" + hand[i] + ", ";
             }
-            output += "" + hand[i] + ", ";
         }
         System.out.println(output);
     }
