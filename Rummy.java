@@ -9,6 +9,9 @@ public class Rummy {
     public static void main(String[] args) throws IOException {
         deck = shuffle(deck);
 
+        System.out.println(getRank(deck[0]));
+        System.out.println(getSuit(deck[0]));
+
         EasyReader keyboard = new EasyReader();
 
         String[] hand1 = new String[8];
@@ -91,16 +94,16 @@ public class Rummy {
             if (pickPile == "p") {
                 switch (player) {
                     case 1:
-                        hand1[8] = pile[pileIndex];
+                        hand1[0] = pile[pileIndex];
                         break;
                     case 2:
-                        hand2[8] = pile[pileIndex];
+                        hand2[0] = pile[pileIndex];
                         break;
                     case 3:
-                        hand3[8] = pile[pileIndex];
+                        hand3[0] = pile[pileIndex];
                         break;
                     case 4:
-                        hand4[8] = pile[pileIndex];
+                        hand4[0] = pile[pileIndex];
                         break;
                     default:
                         continue;
@@ -111,16 +114,16 @@ public class Rummy {
             } else {
                 switch (player) {
                     case 1:
-                        hand1[8] = playableCards[playIndex];
+                        hand1[0] = playableCards[playIndex];
                         break;
                     case 2:
-                        hand2[8] = playableCards[playIndex];
+                        hand2[0] = playableCards[playIndex];
                         break;
                     case 3:
-                        hand3[8] = playableCards[playIndex];
+                        hand3[0] = playableCards[playIndex];
                         break;
                     case 4:
-                        hand4[8] = playableCards[playIndex];
+                        hand4[0] = playableCards[playIndex];
                         break;
                     default:
                         continue;
@@ -145,6 +148,11 @@ public class Rummy {
                     break;
                 default:
                     break;
+            }
+
+            // Check if the player has won.
+            if (winCondition(hand1, 1) || winCondition(hand2, 2) || winCondition(hand3, 3) || winCondition(hand4, 4)) {
+                winner = true;
             }
 
             int putDown = keyboard.readInt("Select the index of the card you'd like to put down (Starting from 1):")
@@ -175,9 +183,8 @@ public class Rummy {
                     break;
             }
 
-            if (winCondition(hand1, 1) || winCondition(hand2, 2) || winCondition(hand3, 3) || winCondition(hand4, 4)) {
-                winner = true;
-            }
+            // Increment pileIndex.
+            pileIndex += 1;
 
             clearScreen();
         }
@@ -197,7 +204,7 @@ public class Rummy {
         hand = insertionSort(hand);
 
         // Win conditions for the 4:
-        for (int i = 0; i < hand.length - 4; i++) {
+        for (int i = 1; i < hand.length - 3; i++) {
             if ((getSuit(hand[i]) == getSuit(hand[i] + 1)) && (getSuit(hand[i]) == getSuit(hand[i] + 2))
                     && (getSuit(hand[i]) == getSuit(hand[i] + 3))) {
                 if ((getRank(hand[i]) == getRank(hand[i + 1]) + 1) && (getRank(hand[i]) == getRank(hand[i + 2]) + 2)
@@ -233,7 +240,7 @@ public class Rummy {
             }
         }
 
-        for (int i = 0; i < hand.length - 3; i++) {
+        for (int i = 1; i < hand.length - 2; i++) {
             if ((getSuit(hand[i]) == getSuit(hand[i] + 1)) && (getSuit(hand[i]) == getSuit(hand[i] + 2))
                     && (getSuit(hand[i]) == getSuit(hand[i] + 3))) {
                 if ((getRank(hand[i]) == getRank(hand[i + 1]) + 1) && (getRank(hand[i]) == getRank(hand[i + 2]) + 2)
@@ -273,7 +280,28 @@ public class Rummy {
     }
 
     public static int getRank(String card) {
-        int rank = card.toCharArray()[1];
+
+        // Intitialise rank
+        int rank = 0;
+
+        switch(card.toCharArray()[1]) {
+            case 'A':
+            rank = 1;
+            break;
+            case 'J':
+            rank = 11;
+            break;
+            case 'Q':
+            rank = 12;
+            break;
+            case 'K':
+            rank = 13;
+            break;
+            default:
+            rank = card.toCharArray()[1];
+            break;
+        }
+        
         return rank;
     }
 
@@ -282,6 +310,9 @@ public class Rummy {
             hand[i] = deck[deckStart];
             deckStart += 1;
         }
+
+        // Sort the hand to make it easier to read.
+        insertionSort(hand);
 
         return hand;
     }
@@ -383,7 +414,7 @@ public class Rummy {
             String key = arr[j];
             int i = j - 1;
             while (i >= 0) {
-                if (key.compareTo(arr[i]) > 0) {
+                if (compareKeys(key, arr[i]) > 0) {
                     break;
                 }
                 arr[i + 1] = arr[i];
@@ -393,6 +424,14 @@ public class Rummy {
         }
         // Return sorted array.
         return arr;
+    }
+
+    private static int compareKeys(final String first, final String second) {
+        if (first == null || second == null) {
+            return 0; 
+        } else {
+            return first.compareTo(second);
+        }
     }
 
     public static String[] deleteElement(String[] arr, String element) {
@@ -442,6 +481,9 @@ public class Rummy {
     public static void displayHand(String[] hand) {
         String output = "";
         for (int i = 0; i < hand.length; i++) {
+            if (hand[i] == null) {
+                continue;
+            }
             output += "" + hand[i] + ", ";
         }
         System.out.println(output);
