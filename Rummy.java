@@ -20,7 +20,7 @@ public class Rummy {
 
         String[] playableCards = new String[52];
 
-        int numPlayers = keyboard.readInt("How many players are you playing with? (Max 4, Min 2) >");
+        int numPlayers = keyboard.readInt("How many players are you playing with? (Max 4, Min 2) > ");
 
         if (numPlayers == 2) {
             hand1 = fillHand(hand1);
@@ -89,21 +89,21 @@ public class Rummy {
             }
 
             String pickPile = keyboard
-                    .readString("Would you like to pick from the player pile [p] or the face-down pile? [f] >")
+                    .readString("Would you like to pick from the player pile [p] or the face-down pile [f]? > ")
                     .toLowerCase();
             if (pickPile == "p") {
                 switch (player) {
                     case 1:
-                        hand1[0] = pile[pileIndex];
+                        hand1[linearSearch(hand1, "00")] = pile[pileIndex];
                         break;
                     case 2:
-                        hand2[0] = pile[pileIndex];
+                        hand2[linearSearch(hand2, "00")] = pile[pileIndex];
                         break;
                     case 3:
-                        hand3[0] = pile[pileIndex];
+                        hand3[linearSearch(hand3, "00")] = pile[pileIndex];
                         break;
                     case 4:
-                        hand4[0] = pile[pileIndex];
+                        hand4[linearSearch(hand4, "00")] = pile[pileIndex];
                         break;
                     default:
                         continue;
@@ -114,16 +114,16 @@ public class Rummy {
             } else {
                 switch (player) {
                     case 1:
-                        hand1[0] = playableCards[playIndex];
+                        hand1[linearSearch(hand1, "00")] = playableCards[playIndex];
                         break;
                     case 2:
-                        hand2[0] = playableCards[playIndex];
+                        hand2[linearSearch(hand2, "00")] = playableCards[playIndex];
                         break;
                     case 3:
-                        hand3[0] = playableCards[playIndex];
+                        hand3[linearSearch(hand3, "00")] = playableCards[playIndex];
                         break;
                     case 4:
-                        hand4[0] = playableCards[playIndex];
+                        hand4[linearSearch(hand4, "00")] = playableCards[playIndex];
                         break;
                     default:
                         continue;
@@ -132,6 +132,8 @@ public class Rummy {
                 playableCards = deleteElement(playableCards, playableCards[playIndex]);
                 playIndex += 1;
             }
+
+            System.out.println(playIndex);
 
             switch (player) {
                 case 1:
@@ -149,8 +151,6 @@ public class Rummy {
                 default:
                     break;
             }
-
-            System.out.println(playIndex);
 
             // Checks if a player has won.
             switch (numPlayers) {
@@ -174,28 +174,28 @@ public class Rummy {
                     break;
             }
 
-            int putDown = keyboard.readInt("Select the index of the card you'd like to put down (Starting from 1) >")
+            int putDown = keyboard.readInt("Select the index of the card you'd like to put down (Starting from 1) > ")
                     - 1;
 
             switch (player) {
                 case 1:
                     pile[pileIndex + 1] = hand1[putDown];
-                    hand1 = deleteElement(hand1, hand1[putDown]);
+                    hand1[putDown] = "00";
                     hand1 = insertionSort(hand1);
                     break;
                 case 2:
                     pile[pileIndex + 1] = hand2[putDown];
-                    hand2 = deleteElement(hand2, hand2[putDown]);
+                    hand2[putDown] = "00";
                     hand2 = insertionSort(hand2);
                     break;
                 case 3:
                     pile[pileIndex + 1] = hand3[putDown];
-                    hand3 = deleteElement(hand3, hand3[putDown]);
+                    hand3[putDown] = "00";
                     hand3 = insertionSort(hand3);
                     break;
                 case 4:
                     pile[pileIndex + 1] = hand4[putDown];
-                    hand4 = deleteElement(hand4, hand4[putDown]);
+                    hand4[putDown] = "00";
                     hand4 = insertionSort(hand4);
                     break;
                 default:
@@ -336,6 +336,8 @@ public class Rummy {
             hand[i] = deck[deckStart];
             deckStart += 1;
         }
+
+        hand[7] = "00";
 
         // Sort the array to make it easier to read.
         hand = insertionSort(hand);
@@ -531,8 +533,9 @@ public class Rummy {
         String output = "";
         for (int i = 0; i < hand.length; i++) {
             if (hand[i] == null) {
+                output += "0, ";
             } else {
-                output += "" + hand[i] + ", ";
+                output += hand[i] + ", ";
             }
         }
         System.out.println(output);

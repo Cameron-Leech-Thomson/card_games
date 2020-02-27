@@ -1,12 +1,11 @@
-import java.text.DecimalFormat;
 public class Test {
   public static void main(String[] args) throws NullPointerException{
-    double val = 0;
-    int hundo = 0;
-    for (int i = 0; i < 7; i++) {
-      val = rand(49.250, 50.750) + hundo;
-      System.out.println(val/1000);
-      hundo += 100;
+    for (int i = 1; i <= 6; i++) {
+      System.out.println("i = " + i + ":");
+      for (int j = 1; j <= i; j++) {
+        System.out.println("j = " + j);
+      }
+      System.out.println("----------------");
     }
   }
 
