@@ -95,15 +95,19 @@ public class Rummy {
                 switch (player) {
                     case 1:
                         hand1[linearSearch(hand1, "00")] = pile[pileIndex];
+                        hand1 = insertionSort(hand1);
                         break;
                     case 2:
                         hand2[linearSearch(hand2, "00")] = pile[pileIndex];
+                        hand2 = insertionSort(hand2);
                         break;
                     case 3:
                         hand3[linearSearch(hand3, "00")] = pile[pileIndex];
+                        hand3 = insertionSort(hand3);
                         break;
                     case 4:
                         hand4[linearSearch(hand4, "00")] = pile[pileIndex];
+                        hand4 = insertionSort(hand4);
                         break;
                     default:
                         continue;
@@ -115,15 +119,19 @@ public class Rummy {
                 switch (player) {
                     case 1:
                         hand1[linearSearch(hand1, "00")] = playableCards[playIndex];
+                        hand1 = insertionSort(hand1);
                         break;
                     case 2:
                         hand2[linearSearch(hand2, "00")] = playableCards[playIndex];
+                        hand2 = insertionSort(hand2);
                         break;
                     case 3:
                         hand3[linearSearch(hand3, "00")] = playableCards[playIndex];
+                        hand3 = insertionSort(hand3);
                         break;
                     case 4:
                         hand4[linearSearch(hand4, "00")] = playableCards[playIndex];
+                        hand4 = insertionSort(hand4);
                         break;
                     default:
                         continue;
@@ -174,29 +182,26 @@ public class Rummy {
                     break;
             }
 
-            int putDown = keyboard.readInt("Select the index of the card you'd like to put down (Starting from 1) > ")
-                    - 1;
+            int putDown = 0;
+            putDown = keyboard.readInt("Select the index of the card you'd like to put down (Starting from 1) > ") - 1;
+            System.out.println(putDown);
 
             switch (player) {
                 case 1:
                     pile[pileIndex + 1] = hand1[putDown];
                     hand1[putDown] = "00";
-                    hand1 = insertionSort(hand1);
                     break;
                 case 2:
                     pile[pileIndex + 1] = hand2[putDown];
                     hand2[putDown] = "00";
-                    hand2 = insertionSort(hand2);
                     break;
                 case 3:
                     pile[pileIndex + 1] = hand3[putDown];
                     hand3[putDown] = "00";
-                    hand3 = insertionSort(hand3);
                     break;
                 case 4:
                     pile[pileIndex + 1] = hand4[putDown];
                     hand4[putDown] = "00";
-                    hand4 = insertionSort(hand4);
                     break;
                 default:
                     break;
@@ -205,9 +210,7 @@ public class Rummy {
             // Increment pileIndex.
             pileIndex += 1;
 
-            clearScreen();
-
-            displayHand(playableCards);
+            // clearScreen();
         }
 
         // Close the reader.
@@ -530,15 +533,14 @@ public class Rummy {
     }
 
     public static void displayHand(String[] hand) {
-        String output = "";
         for (int i = 0; i < hand.length; i++) {
             if (hand[i] == null) {
-                output += "0, ";
+                System.out.print("0, ");
             } else {
-                output += hand[i] + ", ";
+                System.out.print(hand[i] + ", ");
             }
         }
-        System.out.println(output);
+        System.out.println();
     }
 
 }
