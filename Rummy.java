@@ -52,6 +52,17 @@ public class Rummy {
         }
 
         while (!winner) {
+            if (isEmpty(playableCards)) {
+                shuffle(pile);
+
+                for (int i = 1; i < pile.length; i++) {
+                    playableCards[i-1] = pile[i];
+                    pile[i] = null;
+                }
+                pileIndex = 0;
+                playIndex = 0;
+            }
+
             if (player < 5) {
                 System.out.println("Player " + player + "'s turn:");
                 player += 1;
@@ -291,6 +302,15 @@ public class Rummy {
         } else {
             return false;
         }
+    }
+
+    public static boolean isEmpty(String[] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] != null) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static void clearScreen() {
