@@ -78,6 +78,14 @@ public class Rummy {
                 playableCards = rearrangeNull(playableCards);
             }
 
+            while (playableCards[playIndex] == null) {
+                playIndex += 1;
+            }
+
+            while (pile[pileIndex] == null) {
+                pileIndex += 1;
+            }
+
             displayHand(playableCards);
 
             System.out.println("Card on player pile: " + pile[pileIndex]);
