@@ -6,7 +6,7 @@ public class Rummy {
     public static String[] deck = generateDeck();
     public static int deckStart = 0;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         deck = shuffle(deck);
 
         EasyReader keyboard = new EasyReader();
@@ -130,6 +130,8 @@ public class Rummy {
                         continue;
                 }
 
+                System.out.println("You picked up: " + pile[pileIndex]);
+
                 pile = deleteElement(pile, pile[pileIndex]);
                 pileIndex -= 1;
             } else {
@@ -154,11 +156,15 @@ public class Rummy {
                         continue;
                 }
 
+                System.out.println("You picked up: " + playableCards[playIndex]);
+
                 playableCards = deleteElement(playableCards, playableCards[playIndex]);
                 playIndex += 1;
             }
 
-            System.out.println(playIndex);
+            Thread.sleep(1500);
+
+            clearScreen();
 
             switch (player) {
                 case 1:
@@ -559,9 +565,10 @@ public class Rummy {
     }
 
     public static void displayHand(String[] hand) {
+        System.out.print("Your hand: ");
         for (int i = 0; i < hand.length; i++) {
             if (hand[i] == null) {
-                System.out.print("0, ");
+                System.out.print("00, ");
             } else {
                 System.out.print(hand[i] + ", ");
             }
