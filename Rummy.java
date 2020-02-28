@@ -86,8 +86,6 @@ public class Rummy {
                 pileIndex += 1;
             }
 
-            displayHand(playableCards);
-
             System.out.println("Card on player pile: " + pile[pileIndex]);
 
             switch (player) {
@@ -229,7 +227,7 @@ public class Rummy {
             // Increment pileIndex.
             pileIndex += 1;
 
-            // clearScreen();
+            clearScreen();
         }
 
         // Close the reader.
