@@ -29,6 +29,14 @@ public class Poker extends Rummy {
                 }
             }
 
+            // If there are insufficient cards to play a game with the desired number of players, shuffle the deck.
+            if (!enoughCards(deck, numPlayers)) {
+                System.out.println("Insufficient cards left in deck to play. Returning and shuffling all cards...");
+                deck = shuffle(deck);
+                deckStart = 0;
+                System.out.println("New deck shuffled, dealing cards...");
+            }
+
             // Completes the cycle for who starts.
             if (startPlayer > numPlayers) {
                 startPlayer = 1;
@@ -66,7 +74,7 @@ public class Poker extends Rummy {
                 round += 1;
 
                 // Makes sure a player hasn't folded.
-                if (hands[player][0] == "0") {
+                if (hands[player - 1][0] == "0") {
                     System.out.println("Player + " + player + " has folded, skipping their turn...");
                     player += 1;
                 }
