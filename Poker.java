@@ -7,7 +7,7 @@ public class Poker extends Rummy {
     public static String[] deck = shuffle(generateDeck());
     public static int deckStart = 0;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         EasyReader keyboard = new EasyReader();
 
         // Allows players to play multiple games in one run.
@@ -29,7 +29,8 @@ public class Poker extends Rummy {
                 }
             }
 
-            // If there are insufficient cards to play a game with the desired number of players, shuffle the deck.
+            // If there are insufficient cards to play a game with the desired number of
+            // players, shuffle the deck.
             if (!enoughCards(deck, numPlayers)) {
                 System.out.println("Insufficient cards left in deck to play. Returning and shuffling all cards...");
                 deck = shuffle(deck);
@@ -66,13 +67,10 @@ public class Poker extends Rummy {
 
             // Indicates which player's turn it is.
             int player = startPlayer;
-
-            int round = 0;
+        
+            int round = -1;
 
             while (playersIn > 1) {
-                // Increase round by 1.
-                round += 1;
-
                 // Makes sure a player hasn't folded.
                 if (hands[player - 1][0] == "0") {
                     System.out.println("Player + " + player + " has folded, skipping their turn...");
@@ -90,8 +88,31 @@ public class Poker extends Rummy {
                 if (player > numPlayers) {
                     player = startPlayer;
                 }
+                
+                // If a round has been complete, increase the round counter.
+                if (player == startPlayer) {
+                    round += 1;
+                }
+
+                if (round > 0) {
+                    int max = 0;
+                    if ((round + 2) < 6) {
+                        max = round + 2;
+                    }
+                    else {
+                        max = 5;
+                    }
+                    System.out.print("Community cards: ");
+                    for (int i = 0; i < max; i++) {
+                        System.out.print(comCards[i] + ", ");
+                    }
+                    System.out.println();
+                }
+
 
                 displayHand(hands[player - 1]);
+
+                Thread.sleep(1500);
 
             }
 
@@ -115,6 +136,17 @@ public class Poker extends Rummy {
 
         // Return the hand.
         return hand;
+    }
+
+    public static boolean nextRound (String[] bets) {
+        for (int i = 1; i < bets.length; i++) {
+            // If all the bets match, do nothing.
+            if (bets[0] == bets[i]) {}
+            else {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static boolean enoughCards(String[] cards, int numPlayers) {
