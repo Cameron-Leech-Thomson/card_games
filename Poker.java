@@ -83,7 +83,16 @@ public class Poker extends Rummy {
             Thread.sleep(3000);
             clearScreen();
 
+            boolean firstGo;
+
             while (playersIn > 1) {
+                if ((winnings == 0) && (round == -1) && player == startPlayer) {
+                    firstGo = true;
+                }
+                else {
+                    firstGo = false;
+                }
+
                 // Displays the round number.
                 System.out.println("Current round: " + (round + 2));
 
@@ -125,7 +134,9 @@ public class Poker extends Rummy {
                     System.out.println();
                 }
 
-                if ((player == startPlayer) && round == 0) {
+                System.out.println(round);
+
+                if (firstGo) {
                     System.out.println(
                             "This player has the big blind, they are automatically betting £100 and their first turn is skipped.");
 
