@@ -88,8 +88,7 @@ public class Poker extends Rummy {
             while (playersIn > 1) {
                 if ((winnings == 0) && (round == -1) && player == startPlayer) {
                     firstGo = true;
-                }
-                else {
+                } else {
                     firstGo = false;
                 }
 
@@ -134,15 +133,13 @@ public class Poker extends Rummy {
                     System.out.println();
                 }
 
-                System.out.println(round);
-
                 if (firstGo) {
                     System.out.println(
                             "This player has the big blind, they are automatically betting £100 and their first turn is skipped.");
 
                     // Add the blind to the bets & money & pot.
-                    bets[player] = 100;
-                    money[player] -= 100;
+                    bets[player - 1] = 100;
+                    money[player - 1] -= 100;
                     winnings += 100;
 
                     displayHand(hands[player - 1]);
@@ -153,10 +150,113 @@ public class Poker extends Rummy {
                     continue;
                 }
 
+                // Display player's money.
+                System.out.print("You currently have £" + money[player - 1] + ". ");
+
                 // Display current possible winnings.
                 System.out.println("Current possible winnings: " + winnings);
 
+                // Display the player's hand.
                 displayHand(hands[player - 1]);
+
+                boolean inputsReq = true;
+
+                while (inputsReq) {
+                    inputs: {
+                        // Check whether it is possible to check.
+                        boolean checkPos;
+
+                        System.out.print("Would you like to bet[b], or fold[f]? ");
+                        if (bets[player - 1] == bets[player - 2]) {
+                            System.out.println("It is currently possible to check[c].");
+                            checkPos = true;
+                        } else {
+                            System.out.println("It is currently not possible to check.");
+                            checkPos = false;
+                        }
+
+                        boolean validInput = false;
+
+                        while (!validInput) {
+                            // Take in the user's input.
+                            String userInput = keyboard.readString("> ");
+
+                            switch (userInput.toLowerCase()) {
+                                case "b":
+                                    // Initialise betVal.
+                                    int betVal = 0;
+
+                                    System.out.println("How much would you like to bet? You currently have £"
+                                            + money[player - 1] + ". You must at least match the previous bid ("
+                                            + bets[player - 2] + "). If you would like to go back, type [back].");
+
+                                    boolean validBet = false;
+                                    while (!validBet) {
+                                        // Read in the user's bet.
+                                        String bet = keyboard.readString("> ");
+
+                                        if ((bet.toLowerCase()).equals("back")) {
+                                            // Back out;
+                                            break inputs;
+                                        }
+                                        // If valid:
+                                        else if ((Integer.valueOf(bet) > bets[player - 1])
+                                                && (Integer.valueOf(bet) <= money[player - 1])) {
+                                            betVal = Integer.valueOf(bet);
+                                            inputsReq = false;
+                                            validBet = true;
+                                        } else {
+                                            System.out.println("Invalid input - please enter a valid bet.");
+                                        }
+                                    }
+
+                                    // Update the arrays with the new values for money & bets.
+                                    bets[player - 1] += betVal;
+                                    money[player - 1] -= betVal;
+                                    break;
+                                case "f":
+                                    boolean validFold = false;
+                                    while (!validFold) {
+                                        System.out.println(
+                                                "If you fold you are out of this game, are you sure you want to do this? [yes/no]");
+
+                                        // Read in user's input.
+                                        String userInput1 = keyboard.readString("> ");
+
+                                        if ((userInput1.toLowerCase()).equals("yes")) {
+                                            // Fold for the user:
+                                            fold(hands[player - 1]);
+                                            System.out.println(
+                                                    "Fold successful - your hand has been wiped, you are out of this game.");
+                                            playersIn -= 1;
+                                            validFold = true;
+                                        } else if ((userInput1.toLowerCase()).equals("no")) {
+                                            // Back out:
+                                            validFold = true;
+                                            break inputs;
+                                        } else {
+                                            System.out.println("Invalid input - please enter a valid entry.");
+                                        }
+                                    }
+                                    break;
+                                case "c":
+                                    // If it isn't possible to check:
+                                    if (checkPos == false) {
+                                        System.out.println(
+                                                "It is currently not possible to check, please pick another option.");
+                                        break inputs;
+                                    } else {
+                                        System.out.println("You have checked, your bets and money have not changed.");
+                                    }
+                                    break;
+                                default:
+                                    System.out.println("Invalid input - please provide a valid entry.");
+                                    break inputs;
+
+                            }
+                        }
+                    }
+                }
 
                 Thread.sleep(1500);
 
@@ -185,7 +285,7 @@ public class Poker extends Rummy {
         return hand;
     }
 
-    public static int[] resetBets (int[] bets) {
+    public static int[] resetBets(int[] bets) {
         for (int i = 0; i < bets.length; i++) {
             bets[i] = 0;
         }
