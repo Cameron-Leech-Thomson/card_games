@@ -144,7 +144,7 @@ public class Poker extends Rummy {
 
                     displayHand(hands[player - 1]);
 
-                    Thread.sleep(1500);
+                    Thread.sleep(3000);
 
                     clearScreen();
                     continue;
@@ -166,8 +166,14 @@ public class Poker extends Rummy {
                         // Check whether it is possible to check.
                         boolean checkPos;
 
+                        // Index to check the previous bet.
+                        int preIndex = player - 2;
+
                         System.out.print("Would you like to bet[b], or fold[f]? ");
-                        if (bets[player - 1] == bets[player - 2]) {
+                        if ((preIndex) < 0) {
+                            preIndex = numPlayers - 1;
+                        }
+                        if (bets[player - 1] == bets[preIndex]) {
                             System.out.println("It is currently possible to check[c].");
                             checkPos = true;
                         } else {
@@ -200,12 +206,14 @@ public class Poker extends Rummy {
                                             break inputs;
                                         }
                                         // If valid:
-                                        else if ((Integer.valueOf(bet) > bets[player - 1])
-                                                && (Integer.valueOf(bet) <= money[player - 1])) {
-                                            betVal = Integer.valueOf(bet);
-                                            inputsReq = false;
-                                            validBet = true;
-                                        } else {
+                                        try {
+                                            if ((Integer.valueOf(bet) > bets[player - 1])
+                                                    && (Integer.valueOf(bet) <= money[player - 1])) {
+                                                betVal = Integer.valueOf(bet);
+                                                inputsReq = false;
+                                                validBet = true;
+                                            }
+                                        } catch (NumberFormatException e) {
                                             System.out.println("Invalid input - please enter a valid bet.");
                                         }
                                     }
@@ -213,6 +221,11 @@ public class Poker extends Rummy {
                                     // Update the arrays with the new values for money & bets.
                                     bets[player - 1] += betVal;
                                     money[player - 1] -= betVal;
+                                    winnings += betVal;
+
+                                    System.out.println("Bet (£" + betVal
+                                            + ") successful, the winnings and your money will be updated.");
+                                    inputsReq = false;
                                     break;
                                 case "f":
                                     boolean validFold = false;
@@ -238,6 +251,7 @@ public class Poker extends Rummy {
                                             System.out.println("Invalid input - please enter a valid entry.");
                                         }
                                     }
+                                    inputsReq = false;
                                     break;
                                 case "c":
                                     // If it isn't possible to check:
@@ -248,11 +262,11 @@ public class Poker extends Rummy {
                                     } else {
                                         System.out.println("You have checked, your bets and money have not changed.");
                                     }
+                                    inputsReq = false;
                                     break;
                                 default:
                                     System.out.println("Invalid input - please provide a valid entry.");
                                     break inputs;
-
                             }
                         }
                     }
