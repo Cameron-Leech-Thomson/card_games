@@ -19,7 +19,7 @@ public class Poker extends Rummy {
         // Loop through hands and deal each hand 2 cards.
         for (int i = 0; i < hands.length; i++) {
             hands[i] = fillHand(hands[i]);
-        } 
+        }
 
         keyboard.close();
     }
