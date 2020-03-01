@@ -10,7 +10,7 @@ public class Poker extends Rummy {
     public static void main(String[] args) throws IOException {
         EasyReader keyboard = new EasyReader();
 
-        // Allows players to play multiple rounds in one run.
+        // Allows players to play multiple games in one run.
         boolean playAgain = true;
 
         int startPlayer = 1;
@@ -46,6 +46,10 @@ public class Poker extends Rummy {
                 money[i] = 5000;
             }
 
+            // Array containing the community cards.
+            String[] comCards = new String[5];
+            comCards = fillHand(comCards);
+
             System.out.println(
                     "All hands dealt, let's play! Each player will start with £5000, the big blind is 100, and the small blind is 50.");
 
@@ -55,19 +59,31 @@ public class Poker extends Rummy {
             // Indicates which player's turn it is.
             int player = startPlayer;
 
+            int round = 0;
+
             while (playersIn > 1) {
+                // Increase round by 1.
+                round += 1;
+
+                // Makes sure a player hasn't folded.
+                if (hands[player][0] == "0") {
+                    System.out.println("Player + " + player + " has folded, skipping their turn...");
+                    player += 1;
+                }
+
                 // Displays the player
                 if (player <= numPlayers) {
                     System.out.println("Player " + player + "'s turn:");
                     player += 1;
                 }
 
-                // If the player's turn goes out of range, reset back to the start player - completing the cycle.
+                // If the player's turn goes out of range, reset back to the start player -
+                // completing the cycle.
                 if (player > numPlayers) {
                     player = startPlayer;
                 }
 
-                
+                displayHand(hands[player - 1]);
 
             }
 
@@ -90,6 +106,29 @@ public class Poker extends Rummy {
         hand = insertionSort(hand);
 
         // Return the hand.
+        return hand;
+    }
+
+    public static boolean enoughCards(String[] cards, int numPlayers) {
+        // Cards required for the number of players in the game.
+        int cardsReq = 5 + (2 * numPlayers);
+
+        // Cards remaining in the deck.
+        int cardsRem = 51 - deckStart;
+
+        // If there aren't enough cards to play a round.
+        if (cardsReq > cardsRem) {
+            return false;
+        }
+        // If there is.
+        else {
+            return true;
+        }
+    }
+
+    public static String[] fold(String[] hand) {
+        hand[0] = "0";
+        hand[1] = "0";
         return hand;
     }
 }
