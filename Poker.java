@@ -70,7 +70,15 @@ public class Poker extends Rummy {
 
             int round = -1;
 
+            // Allows everyone to read instructions before clearing the screen ready for the
+            // game.
+            Thread.sleep(3000);
+            clearScreen();
+
             while (playersIn > 1) {
+                // Displays the round number.
+                System.out.println("Current round: " + (round + 2));
+
                 // Makes sure a player hasn't folded.
                 if (hands[player - 1][0] == "0") {
                     System.out.println("Player + " + player + " has folded, skipping their turn...");
@@ -89,8 +97,10 @@ public class Poker extends Rummy {
                     player = startPlayer;
                 }
 
+                int[] bets = new int[playersIn];
+
                 // If a round has been complete, increase the round counter.
-                if (player == startPlayer) {
+                if ((player == startPlayer) && (nextRound(bets))) {
                     round += 1;
                 }
 
@@ -112,6 +122,7 @@ public class Poker extends Rummy {
 
                 Thread.sleep(1500);
 
+                clearScreen();
             }
 
             // Increase the position of the start player.
@@ -136,7 +147,7 @@ public class Poker extends Rummy {
         return hand;
     }
 
-    public static boolean nextRound(String[] bets) {
+    public static boolean nextRound(int[] bets) {
         for (int i = 1; i < bets.length; i++) {
             // If all the bets match, do nothing.
             if (bets[0] == bets[i]) {
