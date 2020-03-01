@@ -67,7 +67,7 @@ public class Poker extends Rummy {
 
             // Indicates which player's turn it is.
             int player = startPlayer;
-        
+
             int round = -1;
 
             while (playersIn > 1) {
@@ -88,7 +88,7 @@ public class Poker extends Rummy {
                 if (player > numPlayers) {
                     player = startPlayer;
                 }
-                
+
                 // If a round has been complete, increase the round counter.
                 if (player == startPlayer) {
                     round += 1;
@@ -98,8 +98,7 @@ public class Poker extends Rummy {
                     int max = 0;
                     if ((round + 2) < 6) {
                         max = round + 2;
-                    }
-                    else {
+                    } else {
                         max = 5;
                     }
                     System.out.print("Community cards: ");
@@ -108,7 +107,6 @@ public class Poker extends Rummy {
                     }
                     System.out.println();
                 }
-
 
                 displayHand(hands[player - 1]);
 
@@ -138,11 +136,11 @@ public class Poker extends Rummy {
         return hand;
     }
 
-    public static boolean nextRound (String[] bets) {
+    public static boolean nextRound(String[] bets) {
         for (int i = 1; i < bets.length; i++) {
             // If all the bets match, do nothing.
-            if (bets[0] == bets[i]) {}
-            else {
+            if (bets[0] == bets[i]) {
+            } else {
                 return false;
             }
         }
