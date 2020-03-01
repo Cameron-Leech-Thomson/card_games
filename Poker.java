@@ -60,7 +60,7 @@ public class Poker extends Rummy {
             comCards = fillHand(comCards);
 
             System.out.println(
-                    "All hands dealt, let's play! Each player will start with £5000, the big blind is 100, and the small blind is 50.");
+                    "All hands dealt, let's play! Each player will start with £5000. The blind is £100, there is no small blind.");
 
             // Counter for the amount of players still active in the current round.
             int playersIn = numPlayers;
@@ -68,7 +68,15 @@ public class Poker extends Rummy {
             // Indicates which player's turn it is.
             int player = startPlayer;
 
+            // Round counter.
             int round = -1;
+
+            // Int storing the winnings in the pot.
+            int winnings = 0;
+
+            // Store player bets in an array.
+            int[] bets = new int[playersIn];
+            bets = resetBets(bets);
 
             // Allows everyone to read instructions before clearing the screen ready for the
             // game.
@@ -97,11 +105,10 @@ public class Poker extends Rummy {
                     player = startPlayer;
                 }
 
-                int[] bets = new int[playersIn];
-
                 // If a round has been complete, increase the round counter.
                 if ((player == startPlayer) && (nextRound(bets))) {
                     round += 1;
+                    bets = resetBets(bets);
                 }
 
                 if (round > 0) {
@@ -117,6 +124,26 @@ public class Poker extends Rummy {
                     }
                     System.out.println();
                 }
+
+                if ((player == startPlayer) && round == 0) {
+                    System.out.println(
+                            "This player has the big blind, they are automatically betting £100 and their first turn is skipped.");
+
+                    // Add the blind to the bets & money & pot.
+                    bets[player] = 100;
+                    money[player] -= 100;
+                    winnings += 100;
+
+                    displayHand(hands[player - 1]);
+
+                    Thread.sleep(1500);
+
+                    clearScreen();
+                    continue;
+                }
+
+                // Display current possible winnings.
+                System.out.println("Current possible winnings: " + winnings);
 
                 displayHand(hands[player - 1]);
 
@@ -145,6 +172,13 @@ public class Poker extends Rummy {
 
         // Return the hand.
         return hand;
+    }
+
+    public static int[] resetBets (int[] bets) {
+        for (int i = 0; i < bets.length; i++) {
+            bets[i] = 0;
+        }
+        return bets;
     }
 
     public static boolean nextRound(int[] bets) {
