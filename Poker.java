@@ -232,7 +232,7 @@ public class Poker extends Rummy {
 
                                         if ((userInput1.toLowerCase()).equals("yes")) {
                                             // Fold for the user:
-                                            hands[player-1] = fold(hands[player - 1]);
+                                            hands[player - 1] = fold(hands[player - 1]);
                                             System.out.println(
                                                     "Fold successful - your hand has been wiped, you are out of this game.");
                                             playersIn -= 1;
@@ -282,12 +282,62 @@ public class Poker extends Rummy {
                 clearScreen();
             }
 
+            // Once the game has been completed...
+
+            // Find the remaining player:
+            int remPlayer = findPlayer(hands);
+
+            // Update their statistics.
+            money[remPlayer] += winnings;
+
+            // Display the winner and their winnings.
+            System.out.println("Player " + (remPlayer + 1) + " has won " + winnings + ", bringing their total to £"
+                    + money[remPlayer] + ". \n");
+
+            // Check for valid input.
+            boolean validAgain = false;
+
+            while (validAgain == false) {
+                // Check if the user wants to play again.
+                System.out.println("Would you like to play again? [yes/no]");
+                String againString = keyboard.readString("> ").toLowerCase();
+
+                if (againString.equals("yes")) {
+                    System.out.println("Restarting game...");
+                    playAgain = true;
+                    validAgain = true;
+                }
+                else if (againString.equals("no")) {
+                    System.out.println("Exiting...");
+                    playAgain = false;
+                    validAgain = true;
+                }
+                else {
+                    System.out.println("Invalid input - please enter yes or no.");
+                }
+            }
+
             // Increase the position of the start player.
             startPlayer += 1;
 
+            clearScreen();
         }
 
         keyboard.close();
+    }
+
+    public static int findPlayer(String[][] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            // If player has folded, do nothing.
+            if (arr[i][0] == "0") {
+            }
+            // If they haven't, return the index.
+            else {
+                return i;
+            }
+        }
+        // If no player is found, return -1.
+        return -1;
     }
 
     public static String[] fillHand(String[] hand) {
