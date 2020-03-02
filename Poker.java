@@ -80,7 +80,7 @@ public class Poker extends Rummy {
 
             // Allows everyone to read instructions before clearing the screen ready for the
             // game.
-            Thread.sleep(3000);
+            Thread.sleep(4000);
             clearScreen();
 
             boolean firstGo;
@@ -122,7 +122,7 @@ public class Poker extends Rummy {
                     }
                     System.out.print("Community cards: ");
                     for (int i = 0; i < max; i++) {
-                        System.out.print(comCards[i] + ", ");
+                        System.out.print(comCards[i] + " ");
                     }
                     System.out.println();
                 }
@@ -138,7 +138,7 @@ public class Poker extends Rummy {
 
                     displayHand(hands[player - 1]);
 
-                    Thread.sleep(3000);
+                    Thread.sleep(4000);
 
                     clearScreen();
                     continue;
@@ -157,6 +157,12 @@ public class Poker extends Rummy {
 
                 while (inputsReq) {
                     inputs: {
+                        // Check if the player is bust.
+                        if (isBust(money[player - 1])) {
+                            System.out.println(
+                                    "You have gone bust, you cannot bet for the rest of this round, you can only check or fold.");
+                        }
+
                         // Check whether it is possible to check.
                         boolean checkPos;
 
@@ -183,12 +189,16 @@ public class Poker extends Rummy {
 
                             switch (userInput.toLowerCase()) {
                                 case "b":
+                                    // Make sure the player can actually bet before continuing.
+                                    if (isBust(money[player - 1])) {
+                                        break inputs;
+                                    }
                                     // Initialise betVal.
                                     int betVal = 0;
 
                                     System.out.println("How much would you like to bet? You currently have £"
                                             + money[player - 1] + ". You must at least match the previous bid ("
-                                            + bets[player - 2] + "). If you would like to go back, type [back].");
+                                            + bets[preIndex] + "). If you would like to go back, type [back].");
 
                                     boolean validBet = false;
                                     while (!validBet) {
@@ -201,7 +211,7 @@ public class Poker extends Rummy {
                                         }
                                         // If valid:
                                         try {
-                                            if ((Integer.valueOf(bet) > bets[player - 1])
+                                            if ((Integer.valueOf(bet) > bets[preIndex])
                                                     && (Integer.valueOf(bet) <= money[player - 1])) {
                                                 betVal = Integer.valueOf(bet);
                                                 inputsReq = false;
@@ -285,14 +295,15 @@ public class Poker extends Rummy {
             // Once the game has been completed...
 
             // Find the remaining player:
-            int remPlayer = findPlayer(hands);
+            int remPlayer = findLP(hands);
 
             // Update their statistics.
             money[remPlayer] += winnings;
 
             // Display the winner and their winnings.
             System.out.println("Player " + (remPlayer + 1) + " has won " + winnings + ", bringing their total to £"
-                    + money[remPlayer] + ". \n");
+                    + money[remPlayer] + ". Their hand was " + hands[remPlayer][0] + " & " + hands[remPlayer][1]
+                    + " \n");
 
             // Check for valid input.
             boolean validAgain = false;
@@ -306,13 +317,11 @@ public class Poker extends Rummy {
                     System.out.println("Restarting game...");
                     playAgain = true;
                     validAgain = true;
-                }
-                else if (againString.equals("no")) {
+                } else if (againString.equals("no")) {
                     System.out.println("Exiting...");
                     playAgain = false;
                     validAgain = true;
-                }
-                else {
+                } else {
                     System.out.println("Invalid input - please enter yes or no.");
                 }
             }
@@ -326,7 +335,7 @@ public class Poker extends Rummy {
         keyboard.close();
     }
 
-    public static int findPlayer(String[][] arr) {
+    public static int findLP(String[][] arr) {
         for (int i = 0; i < arr.length; i++) {
             // If player has folded, do nothing.
             if (arr[i][0] == "0") {
@@ -338,6 +347,14 @@ public class Poker extends Rummy {
         }
         // If no player is found, return -1.
         return -1;
+    }
+
+    public static boolean isBust(int money) {
+        if (money <= 50) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public static String[] fillHand(String[] hand) {
