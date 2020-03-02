@@ -218,19 +218,18 @@ public class Poker extends Rummy {
                                         try {
                                             if ((Integer.valueOf(bet) >= bets[preIndex])
                                                     && (Integer.valueOf(bet) <= money[player - 1])) {
-                                                        System.out.println("Betting " + bet + ".");
+                                                System.out.println("Betting " + bet + ".");
                                                 betVal = Integer.valueOf(bet);
                                                 inputsReq = false;
                                                 validBet = true;
-                                            }
-                                            else {
+                                            } else {
                                                 NumberFormatException e = new NumberFormatException();
                                                 throw e;
                                             }
                                         } catch (NumberFormatException e) {
                                             System.out.println("Invalid input - please enter a valid bet.");
+                                        } finally {
                                         }
-                                        finally{}
                                     }
 
                                     // Update the arrays with the new values for money & bets.
@@ -314,7 +313,7 @@ public class Poker extends Rummy {
             // Display the winner and their winnings.
             System.out.println("Player " + (remPlayer + 1) + " has won " + winnings + ", bringing their total to £"
                     + money[remPlayer] + ". Their hand was " + hands[remPlayer][0] + " & " + hands[remPlayer][1]
-                    + " \n");
+                    + ". \n");
 
             // Check for valid input.
             boolean validAgain = false;
@@ -421,5 +420,68 @@ public class Poker extends Rummy {
         hand[0] = "0";
         hand[1] = "0";
         return hand;
+    }
+
+    public static void dealWithInput() {
+
+    }
+
+    public static int[] makeBet(int[] money, int[] bets, int player, int preIndex, int winnings, int inputsReq)
+            throws IOException {
+        EasyReader keyboard = new EasyReader();
+
+        int[] returnInputs = {0};
+
+        // Make sure the player can actually bet before continuing.
+        if (isBust(money[player - 1])) {
+            keyboard.close();
+            return returnInputs;
+        }
+        // Initialise betVal.
+        int betVal = 0;
+
+        System.out.println("How much would you like to bet? You currently have £" + money[player - 1]
+                + ". You must at least match the previous bid (" + bets[preIndex]
+                + "). If you would like to go back, type [back].");
+
+        boolean validBet = false;
+        while (!validBet) {
+            // Read in the user's bet.
+            String bet = keyboard.readString("> ");
+
+            if ((bet.toLowerCase()).equals("back")) {
+                // Back out.
+                keyboard.close();
+                return returnInputs;
+            }
+            // If valid:
+            try {
+                if ((Integer.valueOf(bet) >= bets[preIndex]) && (Integer.valueOf(bet) <= money[player - 1])) {
+                    System.out.println("Betting " + bet + ".");
+                    betVal = Integer.valueOf(bet);
+                    inputsReq = 0;
+                    validBet = true;
+                } else {
+                    NumberFormatException e = new NumberFormatException();
+                    throw e;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input - please enter a valid bet.");
+            } finally {
+            }
+        }
+
+        // Update the arrays with the new values for money & bets.
+        bets[player - 1] += betVal;
+        money[player - 1] -= betVal;
+        winnings += betVal;
+
+        System.out.println("Bet (£" + betVal + ") successful, the winnings and your money will be updated.");
+        inputsReq = 0;
+
+        keyboard.close();
+
+        int[] output = {bets[player-1],money[player-1],winnings,inputsReq};
+        return output;
     }
 }
