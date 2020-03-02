@@ -568,9 +568,9 @@ public class Rummy {
         System.out.print("Your hand: ");
         for (int i = 0; i < hand.length; i++) {
             if (hand[i] == null) {
-                System.out.print("00, ");
+                System.out.print("00 ");
             } else {
-                System.out.print(hand[i] + ", ");
+                System.out.print(hand[i] + " ");
             }
         }
         System.out.println();

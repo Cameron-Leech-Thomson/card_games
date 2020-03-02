@@ -10,6 +10,8 @@ public class Poker extends Rummy {
     public static void main(String[] args) throws IOException, InterruptedException {
         EasyReader keyboard = new EasyReader();
 
+        clearScreen();
+
         // Allows players to play multiple games in one run.
         boolean playAgain = true;
 
@@ -80,7 +82,7 @@ public class Poker extends Rummy {
 
             // Allows everyone to read instructions before clearing the screen ready for the
             // game.
-            Thread.sleep(4000);
+            Thread.sleep(5000);
             clearScreen();
 
             boolean firstGo;
@@ -136,9 +138,12 @@ public class Poker extends Rummy {
                     money[player - 1] -= 100;
                     winnings += 100;
 
+                    // Moves on to next player.
+                    player += 1;
+
                     displayHand(hands[player - 1]);
 
-                    Thread.sleep(4000);
+                    Thread.sleep(5000);
 
                     clearScreen();
                     continue;
@@ -211,15 +216,21 @@ public class Poker extends Rummy {
                                         }
                                         // If valid:
                                         try {
-                                            if ((Integer.valueOf(bet) > bets[preIndex])
+                                            if ((Integer.valueOf(bet) >= bets[preIndex])
                                                     && (Integer.valueOf(bet) <= money[player - 1])) {
+                                                        System.out.println("Betting " + bet + ".");
                                                 betVal = Integer.valueOf(bet);
                                                 inputsReq = false;
                                                 validBet = true;
                                             }
+                                            else {
+                                                NumberFormatException e = new NumberFormatException();
+                                                throw e;
+                                            }
                                         } catch (NumberFormatException e) {
                                             System.out.println("Invalid input - please enter a valid bet.");
                                         }
+                                        finally{}
                                     }
 
                                     // Update the arrays with the new values for money & bets.
@@ -286,7 +297,7 @@ public class Poker extends Rummy {
                     player = startPlayer;
                 }
 
-                Thread.sleep(1500);
+                Thread.sleep(5000);
 
                 clearScreen();
                 clearScreen();
