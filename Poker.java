@@ -97,20 +97,14 @@ public class Poker extends Rummy {
 
                 // Makes sure a player hasn't folded.
                 if (hands[player - 1][0] == "0") {
-                    System.out.println("Player + " + player + " has folded, skipping their turn...");
+                    System.out.println("Player " + player + " has folded, skipping their turn...");
                     player += 1;
+                    continue;
                 }
 
                 // Displays the player
                 if (player <= numPlayers) {
                     System.out.println("Player " + player + "'s turn:");
-                    player += 1;
-                }
-
-                // If the player's turn goes out of range, reset back to the start player -
-                // completing the cycle.
-                if (player > numPlayers) {
-                    player = startPlayer;
                 }
 
                 // If a round has been complete, increase the round counter.
@@ -226,7 +220,7 @@ public class Poker extends Rummy {
                                     System.out.println("Bet (£" + betVal
                                             + ") successful, the winnings and your money will be updated.");
                                     inputsReq = false;
-                                    break;
+                                    break inputs;
                                 case "f":
                                     boolean validFold = false;
                                     while (!validFold) {
@@ -238,11 +232,12 @@ public class Poker extends Rummy {
 
                                         if ((userInput1.toLowerCase()).equals("yes")) {
                                             // Fold for the user:
-                                            fold(hands[player - 1]);
+                                            hands[player-1] = fold(hands[player - 1]);
                                             System.out.println(
                                                     "Fold successful - your hand has been wiped, you are out of this game.");
                                             playersIn -= 1;
                                             validFold = true;
+                                            inputsReq = false;
                                         } else if ((userInput1.toLowerCase()).equals("no")) {
                                             // Back out:
                                             validFold = true;
@@ -252,7 +247,7 @@ public class Poker extends Rummy {
                                         }
                                     }
                                     inputsReq = false;
-                                    break;
+                                    break inputs;
                                 case "c":
                                     // If it isn't possible to check:
                                     if (checkPos == false) {
@@ -263,7 +258,7 @@ public class Poker extends Rummy {
                                         System.out.println("You have checked, your bets and money have not changed.");
                                     }
                                     inputsReq = false;
-                                    break;
+                                    break inputs;
                                 default:
                                     System.out.println("Invalid input - please provide a valid entry.");
                                     break inputs;
@@ -272,8 +267,18 @@ public class Poker extends Rummy {
                     }
                 }
 
+                // Increases the player counter.
+                player += 1;
+
+                // If the player's turn goes out of range, reset back to the start player -
+                // completing the cycle.
+                if (player > numPlayers) {
+                    player = startPlayer;
+                }
+
                 Thread.sleep(1500);
 
+                clearScreen();
                 clearScreen();
             }
 
